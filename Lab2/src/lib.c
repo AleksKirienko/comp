@@ -4,7 +4,7 @@
 #define mask 0xF
 #define mask1 0x01
 #define mask2 0x10
-const int N = 100;
+#define N 100
 int A[N];
 int flag;
 int sc_memoryInit()
@@ -93,9 +93,10 @@ int sc_commandEncode(int command, int operand, int * value)
 
 		}
 	}
-	else return -1;
+	return -1;
 }
-int sc_commandDecode(int value, int * command, int * operand)
+/*int sc_commandDecode(int value, int * command, int * operand)
 {
 	return -1;
 }
+*/
