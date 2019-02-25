@@ -95,9 +95,15 @@ int sc_commandEncode(int command, int operand, int *value) {
 
             return 1;
 
+<<<<<<< HEAD
         }
     }
     return -1;
+=======
+		}
+	}
+	return -1;
+>>>>>>> f6045223ebad9330092a99454919f4b49590b221
 }
 /*int sc_commandDecode(int value, int * command, int * operand)
 {
