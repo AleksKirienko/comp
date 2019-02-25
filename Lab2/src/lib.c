@@ -5,7 +5,7 @@
 #define mask1 0x01
 #define mask2 0x10
 const int N = 100;
-static int A[N];
+int A[N];
 int flag;
 int sc_memoryInit()
 {
