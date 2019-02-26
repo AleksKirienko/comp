@@ -2,14 +2,15 @@
 #include <stdio.h>
 
 #define mask 0xF
-#define mask1 0x01
+#define mask1 0x00
 #define mask2 0x10
 #define N 100
 int A[N];
 int flag;
+int registr;
 
 void printMas() {
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; i++)
         printf("%d ", A[i]);
     printf("\n");
 }
@@ -30,16 +31,16 @@ int sc_memorySet(int address, int value) {
     }
 }
 
-int sc_memoryGet(int address, int *value) {
+int sc_memoryGet(int address, int value) {
     if (address < 0 || address > 99) return -1;
     else {
-        value = &A[address];
-        return 1;
+        value = A[address];
+        return value;
     }
 }
 
 int sc_memorySave(FILE *filename) {
-    fwrite(A, 1, sizeof(A), filename);
+    fwrite(A, sizeof(A), 1, filename);
     return 1;
 }
 
@@ -48,32 +49,34 @@ int sc_memoryLoad(FILE *filename) {
     return 1;
 }
 
-int sc_regInit(int registr) {
+int sc_regInit() {
     registr = 0;
     return 1;
 }
 
-/*int sc_regSet (int registr, int value)
+int sc_regSet (int value)
 {
-if (registr >= mask1 && registr <= mask2)
-{
-//registr = registr|(1 << (value - 1));
-return 1;
+    if (registr >= mask1 && registr <= mask2)
+    {
+        registr = registr|(1 << (value - 1));
+        printf ("%d\n",registr);
+        return 1;
+    }
+    else return -1;
 }
-else return -1;
-}
-int sc_regGet (int registr, int * value)
+int sc_regGet (int value)
 {
-if (registr >= mask1 && registr <= mask2)
-{
-//flag = (registr >> (value-1)) & 0x1;
-return 1;
+    if (registr >= mask1 && registr <= mask2) {
+        flag = (registr >> (value-1)) & 0x1;
+        printf ("%d\n",flag);
+        return 1;
+    }
+    else return -1;
 }
-else return -1;
-}*/
-int sc_commandEncode(int command, int operand, int *value) {
-    if (command == 10 || command == 11 || command == 20 || command == 21 || command > 29 || command < 34 ||
-        command > 39 || command < 44 || command > 50 || command < 77) {
+int sc_commandEncode(int command, int operand, int *value)
+{
+    if (command == 10 || command == 11 || command == 20 || command == 21 || (command > 29 && command < 34) ||
+            (command > 39 && command < 44) || (command > 50 && command < 77)) {
         if (operand / 10 < 8) {
             value[0] = 0;
 
@@ -93,13 +96,25 @@ int sc_commandEncode(int command, int operand, int *value) {
             value[12] = (((operand % 10) / 2) / 2) % 2;
             value[11] = ((((operand % 10) / 2) / 2) / 2) % 2;
 
+            for (int i = 0; i<15;i++)
+            {
+                printf ("%d",value[i]);
+            }
+            printf ("\n");
             return 1;
         }
     }
     return -1;
 }
-/*int sc_commandDecode(int value, int * command, int * operand)
+int sc_commandDecode(int *value, int command, int operand)
 {
-	return -1;
+    for (int i = 0; i<15; i++)
+    {
+        if ((value[i] != 0) && (value[i] != 1)) return -1;
+    }
+	command = (value[1]*4 + value [2]*2 +value [3])*10 + value[4]*8+ value[5]*4+value[6]*2+value[7];
+    printf ("%d ",command);
+    operand = (value[8]*4 + value [9]*2 +value [10])*10 + value[11]*8+ value[12]*4+value[13]*2+value[14];
+    printf ("%d\n",operand);
+    return 1;
 }
-*/
