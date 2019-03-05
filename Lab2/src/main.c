@@ -5,6 +5,7 @@
 int main()
 {
     int c = sc_memoryInit ();
+    int r=0;
     printf ("sc_memoryInit finish with code: %d\n", c);
 
     c = sc_memorySet(5, 10);
@@ -31,17 +32,17 @@ int main()
     c = sc_regInit();
     printf ("sc_regInit finish with code: %d\n", c);
 
-    c = sc_regSet(10);
+    c = sc_regSet(r,10);
     printf ("sc_regSet finish with code: %d\n", c);
 
-    c = sc_regGet(10);
+    c = sc_regGet(r,10);
     printf ("sc_regGet finish with code: %d\n", c);
 
-    int value1[15]={0};
+    int *value1=0;
     c = sc_commandEncode(33, 59, value1);
     printf ("sc_commandEncode finish with code: %d\n", c);
 
-    int command=0, operand=0;
-    c = sc_commandDecode(value1, command, operand);
-    printf ("sc_commandEncode finish with code: %d\n", c);
+    int *command=0, *operand=0;
+     c = sc_commandDecode(3359, command, operand);
+    printf ("sc_commandDecode finish with code: %d\n", c);
 }
