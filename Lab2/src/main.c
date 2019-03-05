@@ -31,10 +31,10 @@ int main()
     c = sc_regInit();
     printf ("sc_regInit finish with code: %d\n", c);
 
-    c = sc_regSet(3);
+    c = sc_regSet(10);
     printf ("sc_regSet finish with code: %d\n", c);
 
-    c = sc_regGet(3);
+    c = sc_regGet(10);
     printf ("sc_regGet finish with code: %d\n", c);
 
     int value1[15]={0};

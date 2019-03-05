@@ -1,9 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define mask 0xF
-#define mask1 0x00
-#define mask2 0x10
+#define O 10
+#define T 11
+#define M 12
+#define P 13
+#define E 14
+
 #define N 100
 int A[N];
 int flag;
@@ -15,6 +18,17 @@ void printMas() {
     printf("\n");
 }
 
+int sc_regSet (int value)
+{
+    if (value >= O && value <= E)
+    {
+        registr = value;
+        printf ("%d\n",registr);
+        return 1;
+    }
+    else {sc_regSet (E); return -1;}
+}
+
 int sc_memoryInit() {
     int i;
     for (i = 0; i < N; i++) {
@@ -24,7 +38,7 @@ int sc_memoryInit() {
 }
 
 int sc_memorySet(int address, int value) {
-    if (address < 0 || address > 99) return -1;
+  if (address < 0 || address > 99) {sc_regSet (M); return -1;}
     else {
         A[address] = value;
         return 1;
@@ -32,7 +46,7 @@ int sc_memorySet(int address, int value) {
 }
 
 int sc_memoryGet(int address, int value) {
-    if (address < 0 || address > 99) return -1;
+    if (address < 0 || address > 99) {sc_regSet (M); return -1;}
     else {
         value = A[address];
         return value;
@@ -54,24 +68,15 @@ int sc_regInit() {
     return 1;
 }
 
-int sc_regSet (int value)
-{
-    if (registr >= mask1 && registr <= mask2)
-    {
-        registr = registr|(1 << (value - 1));
-        printf ("%d\n",registr);
-        return 1;
-    }
-    else return -1;
-}
+
 int sc_regGet (int value)
 {
-    if (registr >= mask1 && registr <= mask2) {
-        flag = (registr >> (value-1)) & 0x1;
-        printf ("%d\n",flag);
-        return 1;
+    if (value >= O && value <= E) {
+        value = registr;
+	 printf ("%d\n",registr);
+	return 1;
     }
-    else return -1;
+    else {sc_regSet (E); return -1;}
 }
 int sc_commandEncode(int command, int operand, int *value)
 {
@@ -104,13 +109,13 @@ int sc_commandEncode(int command, int operand, int *value)
             return 1;
         }
     }
-    return -1;
+    sc_regSet (E); return -1;
 }
 int sc_commandDecode(int *value, int command, int operand)
 {
     for (int i = 0; i<15; i++)
     {
-        if ((value[i] != 0) && (value[i] != 1)) return -1;
+        if ((value[i] != 0) && (value[i] != 1)) {sc_regSet (E); return -1;}
     }
 	command = (value[1]*4 + value [2]*2 +value [3])*10 + value[4]*8+ value[5]*4+value[6]*2+value[7];
     printf ("%d ",command);
