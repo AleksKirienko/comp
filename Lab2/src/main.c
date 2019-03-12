@@ -38,11 +38,11 @@ int main()
     c = sc_regGet(r,10);
     printf ("sc_regGet finish with code: %d\n", c);
 
-    int *value1=0;
-    c = sc_commandEncode(33, 59, value1);
+    int value1=0;
+    c = sc_commandEncode(33, 59, &value1);
     printf ("sc_commandEncode finish with code: %d\n", c);
 
-    int *command=0, *operand=0;
-     c = sc_commandDecode(3359, command, operand);
+    int command, operand;
+     c = sc_commandDecode(4283, &command, &operand);
     printf ("sc_commandDecode finish with code: %d\n", c);
 }
