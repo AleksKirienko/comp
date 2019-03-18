@@ -33,8 +33,13 @@ int mt_getscreensize (int *rows, int *cols)
         return -1;
     }
 }
-int mt_setfgcolor (int colors)
+int mt_setfgcolor (int color)
 {
-    printf("\E[3%dm", colors);
+    printf("\E[3%dmSasha and MikeAirone", color);
+    return 0;
+}
+int mt_setbgcolor (int colors)
+{
+    printf("\E[4%dm", colors);
     return 0;
 }

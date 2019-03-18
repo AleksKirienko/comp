@@ -6,11 +6,11 @@
 
 int main()
 {
-    int rows, cols, color=6;
+    int rows, cols;
     mt_clrscr();
     mt_gotoXY(10, 7);
     mt_getscreensize(&rows, &cols);
+    mt_setfgcolor(1);
+    mt_setbgcolor(4);
     printf("\nrows = %d\ncols = %d\n",rows, cols);
-    mt_setfgcolor (color);
-
 }
