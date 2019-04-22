@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <termios.h>
 #include "lib.h"
 #include "lib3.h"
 #include "lib4.h"
@@ -24,7 +23,7 @@ int rk_mytermrestore ()
 	FILE *f = fopen ("load.in", "rb");
 	if (!f) return -1;
 	fread (&term, sizeof(term),1, f);
-	if (tcsetattr(0, &term) == -1) return -1;
+	if (tcsetattr(0, TCSADRAIN, &term) == -1) return -1;
 	fclose (f);
 	return 0;
 }
@@ -38,7 +37,7 @@ int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
 
     term.c_cc[VTIME] = vtime;
     term.c_cc[VMIN] = vmin;
-    if (tcsetattr(0, &term) == -1) return -1;
+    if (tcsetattr(0, TCSADRAIN, &term) == -1) return -1;
     return 0;
 }
 int read_key(int key)
