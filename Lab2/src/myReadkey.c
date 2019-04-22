@@ -13,7 +13,7 @@ int rk_mytermsave ()
 	return 0;
 	
 }
-int rk_mytermrestore
+int rk_mytermrestore ()
 {
 	struct termios term;
 	FILE *f = fopen ("load.in", "rb");
@@ -22,6 +22,19 @@ int rk_mytermrestore
 	if (tcsetattr(0, &term) == -1) return -1;
 	fclose (f);
 	return 0;
+}
+int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
+{
+    struct termios term;
+    if (tcgetattr(0, &term) == -1) return -1;
+    regime == 1 ? term.c_lflag |= ICANON : term.c_lflag &= ~ICANON;
+    sigint == 1 ? term.c_lflag |= ISIG : term.c_lflag &= ~ISIG;
+    echo == 1 ? term.c_lflag |= ECHO : term.c_lflag &= ~ECHO;
+
+    term.c_cc[VTIME] = vtime;
+    term.c_cc[VMIN] = vmin;
+    if (tcsetattr(0, &term) == -1) return -1;
+    return 0;
 }
 int read_key(int key)
 {
