@@ -3,6 +3,7 @@
 #include "lib.h"
 #include "lib3.h"
 #include "lib4.h"
+#include "lib5.h"
 
 int main()
 {
