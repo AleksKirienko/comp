@@ -88,5 +88,11 @@ int main()
     bc_setbig(big, 0);
     bc_getbigcharpos(big, 1, 1, &value5);
     printf("%d %d %d",B[7], amount, value5);
+    int i;
+    while (1)
+    {
+    	scanf ("%d", &i);
+    	read_key(i);
+    }
 
 }
