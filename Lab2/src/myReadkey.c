@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <termios.h>
+#include "lib.h"
+#include "lib3.h"
+#include "lib4.h"
+#include "lib5.h"
+
 int address = 0;
 int x = 2, y = 2;
 int rk_mytermsave ()

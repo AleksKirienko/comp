@@ -51,12 +51,12 @@ int sc_memorySet(int address, int value) {
     }
 }
 
-int sc_memoryGet(int address, int value) {
+int sc_memoryGet(int address, int* value) {
   int r=0;
   if (address < 0 || address > 99) {sc_regSet (r,M); return -1;}
     else {
-        value = A[address];
-        return value;
+        *value = A[address];
+        return 1;
     }
 }
 
