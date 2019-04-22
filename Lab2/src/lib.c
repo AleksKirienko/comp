@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "lib.h"
+#include "lib3.h"
+#include "lib4.h"
 
 #define O 10
 #define T 11
@@ -13,8 +16,10 @@ int flag;
 
 void printMas() {
     for (int i = 0; i < N; i++)
-        printf("%d ", A[i]);
-    printf("\n");
+    {
+        mt_gotoXY(i/10 + 2, (i % 10)*6+2 );
+        printf("0x%x ", A[i]);
+    }
 }
 
 int sc_regSet (int registr, int value)
