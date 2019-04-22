@@ -31,9 +31,33 @@ int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
 {
     struct termios term;
     if (tcgetattr(0, &term) == -1) return -1;
-    regime == 1 ? term.c_lflag |= ICANON : term.c_lflag &= ~ICANON;
-    sigint == 1 ? term.c_lflag |= ISIG : term.c_lflag &= ~ISIG;
-    echo == 1 ? term.c_lflag |= ECHO : term.c_lflag &= ~ECHO;
+    //regime == 1 ? term.c_lflag |= ICANON : term.c_lflag &= ~ICANON;
+    if (tcgetattr(0, &term) == -1)
+        return -1;
+    if (regime == 1)
+        term.c_lflag |= ICANON;
+    else
+    if (regime == 0)
+        term.c_lflag &= ~ICANON;
+    else
+        return -1;
+
+    //sigint == 1 ? term.c_lflag |= ISIG : term.c_lflag &= ~ISIG;
+    if (sigint == 1)
+        term.c_lflag |= ISIG;
+    else
+    if (sigint == 0)
+        term.c_lflag &= ~ISIG;
+    else
+        return -1;
+    //echo == 1 ? term.c_lflag |= ECHO : term.c_lflag &= ~ECHO;
+    if (echo == 1)
+        term.c_lflag |= ECHO;
+    else
+    if (echo == 0)
+        term.c_lflag &= ~ECHO;
+    else
+        return -1;
 
     term.c_cc[VTIME] = vtime;
     term.c_cc[VMIN] = vmin;
@@ -45,53 +69,50 @@ int read_key(int key)
 	int value;
 	switch (key)
 	{
-		case 1: 
-		{
+		case 1:
 			if (address % 10 == 9) return -1;
 			mt_setbgcolor (0);
-			x+=7;
+			y+=6;
 			address++;
 			sc_memoryGet(address, &value);
 			mt_setbgcolor (4);
 			mt_gotoXY(x, y);
 			printf("%x",value);
-			break;	
-		}
-		case 2: 
-		{
+            mt_gotoXY(23, 1);
+			break;
+		case 2:
 			if (address % 10 == 0) return -1;
 			mt_setbgcolor (0);
-			x-=7;
+			y-=6;
 			address--;
 			sc_memoryGet(address, &value);
 			mt_setbgcolor (4);
 			mt_gotoXY(x, y);
 			printf("%x",value);
-			break;	
-		}
-		case 3: 
-		{
+            mt_gotoXY(23, 1);
+			break;
+		case 3:
 			if (address / 10 == 9) return -1;
 			mt_setbgcolor (0);
-			y--;
+			x--;
 			address-=10;
 			sc_memoryGet(address, &value);
 			mt_setbgcolor (4);
 			mt_gotoXY(x, y);
 			printf("%x",value);
-			break;	
-		}
-		case 4: 
-		{
+            mt_gotoXY(23, 1);
+			break;
+		case 4:
 			if (address / 10 == 0) return -1;
 			mt_setbgcolor (0);
-			y++;
+			x++;
 			address+=10;
 			sc_memoryGet(address, &value);
 			mt_setbgcolor (4);
 			mt_gotoXY(x, y);
 			printf("%x",value);
-			break;	
-		}
+            mt_gotoXY(23, 1);
+			break;
 	}
+	return 0;
 }
