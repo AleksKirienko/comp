@@ -16,7 +16,15 @@ int main()
     bc_box(1, 1, 12, 63);
     mt_gotoXY(2, 0);
     printMas();
+
+    int value;
+    sc_memoryGet(0, &value);
+    mt_gotoXY(2, 2);
+    mt_setbgcolor (4);
+    printf("0x%x",value);
+    mt_setbgcolor (9);
     mt_gotoXY(1, 28);
+
     printf("Memory");
 
     bc_box(1, 64, 3, 20);
@@ -52,13 +60,13 @@ int main()
     bc_setbigcharpos (big, 1, 1, 1);
 
     bc_printbigchar (big,14, 2, 7, 2);
-    bc_setbig(big, 0);
+    bc_setbig(big, '0');
     bc_printbigchar (big,14, 10, 7, 2);
-    bc_setbig(big, 0);
+    bc_setbig(big, '0');
     bc_printbigchar (big,14, 18, 7, 2);
-    bc_setbig(big, 0);
+    bc_setbig(big, '0');
     bc_printbigchar (big,14, 26, 7, 2);
-    bc_setbig(big, 0);
+    bc_setbig(big, '0');
     bc_printbigchar (big,14, 34, 7, 2);
 
     int B[8];
@@ -89,11 +97,17 @@ int main()
     bc_setbig(big, 0);
     bc_getbigcharpos(big, 1, 1, &value5);
     printf("%d %d %d",B[7], amount, value5);
-    int i;
-    while (1)
-    {
-    	scanf ("%d", &i);
-    	read_key(i);
-    }
 
+    //char A[8];
+    enum keys key;
+    setbuf(stdout, NULL);
+    //rk_mytermregime(0, 0, 1, 0, 1);
+
+    while (key != Esc)
+        //read (0, A, 7);
+        rk_readkey(&key);
+
+
+
+    return 0;
 }

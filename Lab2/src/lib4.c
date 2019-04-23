@@ -106,43 +106,43 @@ void bc_setbig(int *big, char value) {
             big[0] = 2113929216;
             big[1] = 126;
             break;
-        case 0:
+        case '0':
             big[0] = 2172731964;
             big[1] = 1010991489;
             break;
-        case 1:
+        case '1':
             big[0] = 269752336;
             big[1] = 2081427472;
             break;
-        case 2:
+        case '2':
             big[0] = 541213244;
             big[1] = 2114193424;
             break;
-        case 3:
+        case '3':
             big[0] = 809517628;
             big[1] = 1010974784;
             break;
-        case 4:
+        case '4':
             big[0] = 606613536;
             big[1] = 1881177634;
             break;
-        case 5:
+        case '5':
             big[0] = 1040319102;
             big[1] = 1044398144;
             break;
-        case 6:
+        case '6':
             big[0] = 1040335420;
             big[1] = 1010975298;
             break;
-        case 7:
+        case '7':
             big[0] = 541081726;
             big[1] = 134744080;
             break;
-        case 8:
+        case '8':
             big[0] = 1010975292;
             big[1] = 1010975298;
             break;
-        case 9:
+        case '9':
             big[0] = 1111638588;
             big[1] = 1010974844;
             break;
