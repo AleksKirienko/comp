@@ -96,7 +96,7 @@ int main()
     int value5;
     bc_setbig(big, 0);
     bc_getbigcharpos(big, 1, 1, &value5);
-    printf("%d %d %d",B[7], amount, value5);
+    //printf("%d %d %d",B[7], amount, value5);
 
     //char A[8];
     enum keys key;
