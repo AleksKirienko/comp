@@ -97,18 +97,11 @@ int main()
     int value5;
     bc_setbig(big, 0);
     bc_getbigcharpos(big, 1, 1, &value5);
-    //printf("%d %d %d",B[7], amount, value5);
 
-    //char A[8];
     enum keys key;
     setbuf(stdout, NULL);
-    //rk_mytermregime(0, 0, 1, 0, 1);
 
-    while (1){
+    while (key != Esc)
         rk_readkey(&key);
-
-        //Timer();
-    }
-
     return 0;
 }

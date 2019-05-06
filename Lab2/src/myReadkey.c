@@ -205,7 +205,6 @@ void shandler(int signo)
     int value;
     char A[4];
     int big[2];
-    //sc_regGet (T, &value);
 
     if (address == 99)
     {
@@ -301,7 +300,8 @@ int read_key(enum keys key)
 	int big[2];
 	sc_regGet (T, &value);
 	if (value == 1 && key != Reset){
-	    printf("*_*");
+	    Timer();
+        mt_gotoXY(25, 1);
         return 0;
 	}
 
@@ -450,7 +450,6 @@ int read_key(enum keys key)
 		case Reset:
 			Signal();
 			break;
-
 	}
 	mt_setbgcolor (9);
 	mt_gotoXY(23, 1);
