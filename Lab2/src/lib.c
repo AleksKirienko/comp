@@ -3,17 +3,13 @@
 #include "lib.h"
 #include "lib3.h"
 #include "lib4.h"
+#include "lib5.h"
 
-#define O 10
-#define T 11
-#define M 12
-#define P 13
-#define E 14
+
 
 #define N 100
 int A[N];
-int flag;
-
+int registr;
 void printMas() {
     for (int i = 0; i < N; i++)
     {
@@ -22,16 +18,27 @@ void printMas() {
     }
 }
 
-int sc_regSet (int registr, int value)
+int sc_regSet (int registor, int value)
 {
-  int r=0;
-    if (value >= O && value <= E)
-    {
-        registr |= value;
-        printf ("%d\n",registr);
-        return 1;
-    }
-    else {sc_regSet (r,E); return -1;}
+	if (registor > 0 && registor < 6)
+	{
+		if (value == 1)
+		{
+			registr |= (1 << (registor - 1));
+			return 0;
+		}
+		if (value == 0)
+		{
+			registr &= (~(1 << (registor - 1)));
+			return 0;
+		}
+		return -1;
+	}
+	else
+	{
+		sc_regSet(E, 1);
+		return -1;
+	}
 }
 
 int sc_memoryInit() {
@@ -70,18 +77,17 @@ int sc_memoryLoad(FILE *filename) {
     return 1;
 }
 
-int sc_regInit(int registr) {
+int sc_regInit(void) {
     registr = 0;
     return 1;
 }
 
-
-int sc_regGet (int registr,int value)
+int sc_regGet (int registor,int *value)
 {
-  int r=0;
-    if (registr >= 0 && registr <= 10) {
-        value = (registr >> (value-1)) & 0x1;
-	 printf ("%d\n",value);
+	int r=0;
+    if (registor >= 0 && registor <= 10) {
+        *value = (registr >> (registor-1)) & 0x1;
+	//printf ("%d\n",value);
 	return 1;
     }
     else {sc_regSet (r,E); return -1;}

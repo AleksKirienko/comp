@@ -129,12 +129,169 @@ void itoa(int n, char s[])
     reverse(s);
 }
 
+void printGUI (void)
+{
+	mt_clrscr();
+    sc_memoryInit ();
+
+    bc_box(1, 1, 12, 63);
+    mt_gotoXY(2, 0);
+    printMas();
+
+    int value;
+    sc_memoryGet(0, &value);
+    mt_gotoXY(2, 2);
+    mt_setbgcolor (4);
+    printf("0x%x",value);
+    mt_setbgcolor (9);
+    mt_gotoXY(1, 28);
+
+    printf("Memory");
+
+    bc_box(1, 64, 3, 20);
+    mt_gotoXY(1, 67);
+    printf("Accumulator");
+
+    bc_box(4, 64, 3, 20);
+    mt_gotoXY(4, 65);
+    printf("InstructionCounter");
+
+    bc_box(7, 64, 3, 20);
+    mt_gotoXY(7, 70);
+    printf("Operation");
+
+    bc_box(10, 64, 3, 20);
+    mt_gotoXY(10, 70);
+    printf("Flags");
+    mt_gotoXY(11, 68);
+    printf("O E V M");
+
+    bc_box(13, 44, 10, 20);
+    mt_gotoXY(13, 50);
+    printf("Keys");
+    mt_gotoXY(14, 45);
+
+    printf("L  - load");
+    mt_gotoXY(15, 45);
+    printf("S  - save ");
+
+    bc_box(13, 1, 10, 42);
+    bc_setbig(big, '+');
+    bc_setbigcharpos (big, 4, 1, 0);
+    bc_setbigcharpos (big, 1, 1, 1);
+
+    bc_printbigchar (big,14, 2, 7, 2);
+    bc_setbig(big, '0');
+    bc_printbigchar (big,14, 10, 7, 2);
+    bc_setbig(big, '0');
+    bc_printbigchar (big,14, 18, 7, 2);
+    bc_setbig(big, '0');
+    bc_printbigchar (big,14, 26, 7, 2);
+    bc_setbig(big, '0');
+    bc_printbigchar (big,14, 34, 7, 2);
+}
+
+void sighandler (int signo)
+{
+	alarm(0);
+	sc_regInit();
+	sc_memoryInit();
+	printGUI();
+}
+
+void signalhandler(int signo)
+{
+    int value;
+    char A[4];
+    int big[2];
+    //sc_regGet (T, &value);
+
+    if (address == 99)
+    {
+        sc_memoryGet(address, &value);
+        mt_gotoXY(x, y);
+        mt_setbgcolor(9);
+        printf("0x%x", value);
+        x = 2;
+        y = 2;
+        address=0;
+
+        sc_memoryGet(address, &value);
+        mt_setbgcolor(4);
+        mt_gotoXY(x, y);
+        printf("0x%x", value);
+    }
+    if (address % 10 == 9)
+    {
+        sc_memoryGet(address, &value);
+        mt_gotoXY(x, y);
+        mt_setbgcolor(9);
+        printf("0x%x", value);
+        y = 2;
+        x++;
+        address++;
+        sc_memoryGet(address, &value);
+        mt_setbgcolor(4);
+        mt_gotoXY(x, y);
+        printf("0x%x", value);
+    }
+    else
+     {
+        sc_memoryGet(address, &value);
+        mt_gotoXY(x, y);
+        mt_setbgcolor(9);
+        printf("0x%x", value);
+        y += 6;
+        address++;
+        sc_memoryGet(address, &value);
+        mt_setbgcolor(4);
+        mt_gotoXY(x, y);
+        printf("0x%x", value);
+        //mt_gotoXY(23, 1);
+    }
+    itoa(value, A);
+    bc_setbig(big, '+');
+    bc_printbigchar (big,14, 2, 7, 2);
+    bc_setbig(big, A[0]);
+    bc_printbigchar (big,14, 10, 7, 2);
+    bc_setbig(big, A[1]);
+    bc_printbigchar (big,14, 18, 7, 2);
+    bc_setbig(big, A[2]);
+    bc_printbigchar (big,14, 26, 7, 2);
+    bc_setbig(big, A[3]);
+    bc_printbigchar (big,14, 34, 7, 2);
+}
+
+void Signal(void)
+{
+	sc_regSet(T, 0);
+	signal (SIGUSR1, sighandler);
+	raise (SIGUSR1);
+}
+
+void Timer (void)
+{
+    sc_regSet(T, 1);
+    struct itimerval nval, oval;
+    signal (SIGALRM, signalhandler);
+
+    nval.it_interval.tv_sec = 1;
+    nval.it_interval.tv_usec = 0;
+    nval.it_value.tv_sec = 1;
+    nval.it_value.tv_usec = 0;
+
+    setitimer (ITIMER_REAL, &nval, &oval);
+}
+
 int read_key(enum keys key)
 {
     FILE *f;
 	int value;
 	char A[4];
 	int big[2];
+	sc_regGet (T, &value);
+	if (value == 1 && key != 'i')
+		return 0;
 	switch (key)
 	{
 		case Right:
@@ -203,7 +360,6 @@ int read_key(enum keys key)
             mt_gotoXY(x, y);
             printf("0x%x",value);
             mt_gotoXY(23, 1);
-
 
             itoa(value, A);
             bc_setbig(big, '+');
@@ -275,8 +431,15 @@ int read_key(enum keys key)
             mt_gotoXY(25, 1);
             printf ("     ");
 	        break;
+		case 'r':
+			Timer();
+			break;
+		case 'i':
+			Signal();
+			break;
+
 	}
-    mt_setbgcolor (9);
-    mt_gotoXY(23, 1);
+	mt_setbgcolor (9);
+	mt_gotoXY(23, 1);
 	return 0;
 }

@@ -10,15 +10,16 @@ int main()
     int fd = open("src/Bigchars", O_WRONLY);
     mt_clrscr();
     sc_memoryInit ();
-    //int r=0;
 
-    sc_memorySet(15, 9);
     bc_box(1, 1, 12, 63);
     mt_gotoXY(2, 0);
+    sc_memorySet(5, 9);
     printMas();
 
     int value;
+
     sc_memoryGet(0, &value);
+
     mt_gotoXY(2, 2);
     mt_setbgcolor (4);
     printf("0x%x",value);
@@ -103,11 +104,13 @@ int main()
     setbuf(stdout, NULL);
     //rk_mytermregime(0, 0, 1, 0, 1);
 
-    while (key != Esc)
+   // while (key != Esc)
         //read (0, A, 7);
-        rk_readkey(&key);
-
-
+       // rk_readkey(&key);
+  //  {
+        Timer();
+        //sleep(1);
+  //  }
 
     return 0;
 }
