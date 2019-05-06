@@ -66,6 +66,7 @@ int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
 }
 int rk_readkey (enum keys *key)
 {
+    *key=100;
     char A[8];
     rk_mytermregime(0, 0, 1, 0, 1);
 
@@ -196,10 +197,10 @@ void sighandler (int signo)
 	alarm(0);
 	sc_regInit();
 	sc_memoryInit();
-	printGUI();
+	printGUI()  ;
 }
 
-void signalhandler(int signo)
+void shandler(int signo)
 {
     int value;
     char A[4];
@@ -264,19 +265,28 @@ void signalhandler(int signo)
 
 void Signal(void)
 {
-	sc_regSet(T, 0);
-	signal (SIGUSR1, sighandler);
-	raise (SIGUSR1);
-}
+    int value;
+    sc_regSet(T, 0);
 
+    sc_memoryGet(address, &value);
+    mt_gotoXY(x, y);
+    mt_setbgcolor(9);
+    printf("0x%x", value);
+    x = 2;
+    y = 2;
+    address = 0;
+
+    signal (SIGUSR1, sighandler);
+    raise (SIGUSR1);
+}
 void Timer (void)
 {
     sc_regSet(T, 1);
     struct itimerval nval, oval;
-    signal (SIGALRM, signalhandler);
+    signal (SIGALRM, shandler);
 
     nval.it_interval.tv_sec = 1;
-    nval.it_interval.tv_usec = 0;
+    nval.it_interval.tv_usec = 1;
     nval.it_value.tv_sec = 1;
     nval.it_value.tv_usec = 0;
 
@@ -290,8 +300,11 @@ int read_key(enum keys key)
 	char A[4];
 	int big[2];
 	sc_regGet (T, &value);
-	if (value == 1 && key != 'i')
-		return 0;
+	if (value == 1 && key != Reset){
+	    printf("*_*");
+        return 0;
+	}
+
 	switch (key)
 	{
 		case Right:
@@ -431,10 +444,10 @@ int read_key(enum keys key)
             mt_gotoXY(25, 1);
             printf ("     ");
 	        break;
-		case 'r':
+		case Run:
 			Timer();
 			break;
-		case 'i':
+		case Reset:
 			Signal();
 			break;
 

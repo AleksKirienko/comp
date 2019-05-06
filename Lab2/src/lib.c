@@ -5,8 +5,6 @@
 #include "lib4.h"
 #include "lib5.h"
 
-
-
 #define N 100
 int A[N];
 int registr;
@@ -87,7 +85,6 @@ int sc_regGet (int registor,int *value)
 	int r=0;
     if (registor >= 0 && registor <= 10) {
         *value = (registr >> (registor-1)) & 0x1;
-	//printf ("%d\n",value);
 	return 1;
     }
     else {sc_regSet (r,E); return -1;}

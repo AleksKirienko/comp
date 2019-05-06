@@ -104,13 +104,11 @@ int main()
     setbuf(stdout, NULL);
     //rk_mytermregime(0, 0, 1, 0, 1);
 
-   // while (key != Esc)
-        //read (0, A, 7);
-       // rk_readkey(&key);
-  //  {
-        Timer();
-        //sleep(1);
-  //  }
+    while (1){
+        rk_readkey(&key);
+
+        //Timer();
+    }
 
     return 0;
 }
