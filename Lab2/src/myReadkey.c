@@ -27,14 +27,50 @@ void print (int value, char* A)
 	{
 		bc_setbig(big, ' ');
 		bc_printbigchar (big,14, 2, 7, 2);
-    		bc_setbig(big, A[0]);
-    		bc_printbigchar (big,14, 10, 7, 2);
-    		bc_setbig(big, A[1]);
-    		bc_printbigchar (big,14, 18, 7, 2);
-    		bc_setbig(big, A[2]);
-    		bc_printbigchar (big,14, 26, 7, 2);
-    		bc_setbig(big, A[3]);
-    		bc_printbigchar (big,14, 34, 7, 2);
+		if (A[3] <= '9' && A[3]>='0')
+    		{
+			bc_setbig(big, A[0]);
+    			bc_printbigchar (big,14, 10, 7, 2);
+    			bc_setbig(big, A[1]);
+    			bc_printbigchar (big,14, 18, 7, 2);
+    			bc_setbig(big, A[2]);
+    			bc_printbigchar (big,14, 26, 7, 2);
+    			bc_setbig(big, A[3]);
+    			bc_printbigchar (big,14, 34, 7, 2);
+		}
+		else if (A[2] <= '9' && A[2]>='0')
+    		{
+			bc_setbig(big, A[3]);
+    			bc_printbigchar (big,14, 10, 7, 2);
+    			bc_setbig(big, A[0]);
+    			bc_printbigchar (big,14, 18, 7, 2);
+    			bc_setbig(big, A[1]);
+    			bc_printbigchar (big,14, 26, 7, 2);
+    			bc_setbig(big, A[2]);
+    			bc_printbigchar (big,14, 34, 7, 2);
+		}
+		else if (A[1] <= '9' && A[1]>='0')
+    		{
+			bc_setbig(big, A[2]);
+    			bc_printbigchar (big,14, 10, 7, 2);
+    			bc_setbig(big, A[3]);
+    			bc_printbigchar (big,14, 18, 7, 2);
+    			bc_setbig(big, A[0]);
+    			bc_printbigchar (big,14, 26, 7, 2);
+    			bc_setbig(big, A[1]);
+    			bc_printbigchar (big,14, 34, 7, 2);
+		}
+		else if (A[0] <= '9' && A[0]>='0')
+    		{
+			bc_setbig(big, A[3]);
+    			bc_printbigchar (big,14, 10, 7, 2);
+    			bc_setbig(big, A[2]);
+    			bc_printbigchar (big,14, 18, 7, 2);
+    			bc_setbig(big, A[1]);
+    			bc_printbigchar (big,14, 26, 7, 2);
+    			bc_setbig(big, A[0]);
+    			bc_printbigchar (big,14, 34, 7, 2);
+		}
 	}
 }
 int rk_mytermsave ()
