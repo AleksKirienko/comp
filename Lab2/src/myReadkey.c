@@ -6,6 +6,7 @@
 
 int address = 0;
 int x = 2, y = 2;
+int Instr = 0;
 int rk_mytermsave ()
 {
 	struct termios term;
@@ -165,7 +166,7 @@ void printGUI (void)
     mt_gotoXY(10, 70);
     printf("Flags");
     mt_gotoXY(11, 68);
-    printf("O E V M");
+    printf("O E V M T");
 
     bc_box(13, 44, 10, 20);
     mt_gotoXY(13, 50);
@@ -175,6 +176,15 @@ void printGUI (void)
     printf("L  - load");
     mt_gotoXY(15, 45);
     printf("S  - save ");
+    mt_gotoXY(16, 45);
+    printf("i - Reset ");
+    mt_gotoXY(17, 45);
+    printf("r - Run");
+    mt_gotoXY(18, 45);
+    printf("Esc - escape ");
+    mt_gotoXY(19, 45);
+    printf("F5 - enter chars");
+
 
     bc_box(13, 1, 10, 42);
     bc_setbig(big, '+');
@@ -197,7 +207,7 @@ void sighandler (int signo)
 	alarm(0);
 	sc_regInit();
 	sc_memoryInit();
-	printGUI()  ;
+	printGUI();
 }
 
 void shandler(int signo)
@@ -277,6 +287,11 @@ void Signal(void)
 
     signal (SIGUSR1, sighandler);
     raise (SIGUSR1);
+
+    Instr = 0;
+    mt_gotoXY(5, 65);
+    mt_setbgcolor(9);
+    printf ("0x%d", Instr);
 }
 void Timer (void)
 {
@@ -301,156 +316,182 @@ int read_key(enum keys key)
 	sc_regGet (T, &value);
 	if (value == 1 && key != Reset){
 	    Timer();
+
+        Instr = address;
+        mt_gotoXY(5, 65);
+        mt_setbgcolor(9);
+        printf ("0x%d", Instr);
+
+        mt_gotoXY(11, 76);
+        mt_setbgcolor(4);
+        printf("T");
         mt_gotoXY(25, 1);
+
         return 0;
 	}
+    if (value == 0) {
+        switch (key) {
+            case Right:
 
-	switch (key)
-	{
-		case Right:
-			if (address % 10 == 9) break;
-            sc_memoryGet(address, &value);
-            mt_gotoXY(x, y);
-			mt_setbgcolor (9);
-            printf("0x%x",value);
-			y+=6;
-			address++;
-			sc_memoryGet(address, &value);
-			mt_setbgcolor (4);
-			mt_gotoXY(x, y);
-			printf("0x%x",value);
-            mt_gotoXY(23, 1);
+                if (address % 10 == 9) break;
+                sc_memoryGet(address, &value);
+                mt_gotoXY(x, y);
+                mt_setbgcolor(9);
+                printf("0x%x", value);
+                y += 6;
+                address++;
+                sc_memoryGet(address, &value);
+                mt_setbgcolor(4);
+                mt_gotoXY(x, y);
+                printf("0x%x", value);
+                mt_gotoXY(23, 1);
 
-            itoa(value, A);
-            bc_setbig(big, '+');
-            bc_printbigchar (big,14, 2, 7, 2);
-            bc_setbig(big, A[0]);
-            bc_printbigchar (big,14, 10, 7, 2);
-            bc_setbig(big, A[1]);
-            bc_printbigchar (big,14, 18, 7, 2);
-            bc_setbig(big, A[2]);
-            bc_printbigchar (big,14, 26, 7, 2);
-            bc_setbig(big, A[3]);
-            bc_printbigchar (big,14, 34, 7, 2);
+                itoa(value, A);
+                bc_setbig(big, '+');
+                bc_printbigchar(big, 14, 2, 7, 2);
+                bc_setbig(big, A[0]);
+                bc_printbigchar(big, 14, 10, 7, 2);
+                bc_setbig(big, A[1]);
+                bc_printbigchar(big, 14, 18, 7, 2);
+                bc_setbig(big, A[2]);
+                bc_printbigchar(big, 14, 26, 7, 2);
+                bc_setbig(big, A[3]);
+                bc_printbigchar(big, 14, 34, 7, 2);
 
-			break;
-		case Left:
-			if (address % 10 == 0) break;
-            sc_memoryGet(address, &value);
-            mt_gotoXY(x, y);
-            mt_setbgcolor (9);
-            printf("0x%x",value);
-            y-=6;
-            address--;
-            sc_memoryGet(address, &value);
-            mt_setbgcolor (4);
-            mt_gotoXY(x, y);
-            printf("0x%x",value);
-            mt_gotoXY(23, 1);
+                break;
+            case Left:
 
-            itoa(value, A);
-            bc_setbig(big, '+');
-            bc_printbigchar (big,14, 2, 7, 2);
-            bc_setbig(big, A[0]);
-            bc_printbigchar (big,14, 10, 7, 2);
-            bc_setbig(big, A[1]);
-            bc_printbigchar (big,14, 18, 7, 2);
-            bc_setbig(big, A[2]);
-            bc_printbigchar (big,14, 26, 7, 2);
-            bc_setbig(big, A[3]);
-            bc_printbigchar (big,14, 34, 7, 2);
-			break;
-		case Up:
-			if (address / 10 == 0) break;
-            sc_memoryGet(address, &value);
-            mt_gotoXY(x, y);
-            mt_setbgcolor (9);
-            printf("0x%x",value);
-            x--;
-            address-=10;
-            sc_memoryGet(address, &value);
-            mt_setbgcolor (4);
-            mt_gotoXY(x, y);
-            printf("0x%x",value);
-            mt_gotoXY(23, 1);
+                if (address % 10 == 0) break;
+                sc_memoryGet(address, &value);
+                mt_gotoXY(x, y);
+                mt_setbgcolor(9);
+                printf("0x%x", value);
+                y -= 6;
+                address--;
+                sc_memoryGet(address, &value);
+                mt_setbgcolor(4);
+                mt_gotoXY(x, y);
+                printf("0x%x", value);
+                mt_gotoXY(23, 1);
 
-            itoa(value, A);
-            bc_setbig(big, '+');
-            bc_printbigchar (big,14, 2, 7, 2);
-            bc_setbig(big, A[0]);
-            bc_printbigchar (big,14, 10, 7, 2);
-            bc_setbig(big, A[1]);
-            bc_printbigchar (big,14, 18, 7, 2);
-            bc_setbig(big, A[2]);
-            bc_printbigchar (big,14, 26, 7, 2);
-            bc_setbig(big, A[3]);
-            bc_printbigchar (big,14, 34, 7, 2);
-			break;
-		case Down:
-			if (address / 10 == 9) break;
-            sc_memoryGet(address, &value);
-            mt_gotoXY(x, y);
-            mt_setbgcolor (9);
-            printf("0x%x",value);
-            x++;
-            address+=10;
-            sc_memoryGet(address, &value);
-            mt_setbgcolor (4);
-            mt_gotoXY(x, y);
-            printf("0x%x",value);
-            mt_gotoXY(23, 1);
+                itoa(value, A);
+                bc_setbig(big, '+');
+                bc_printbigchar(big, 14, 2, 7, 2);
+                bc_setbig(big, A[0]);
+                bc_printbigchar(big, 14, 10, 7, 2);
+                bc_setbig(big, A[1]);
+                bc_printbigchar(big, 14, 18, 7, 2);
+                bc_setbig(big, A[2]);
+                bc_printbigchar(big, 14, 26, 7, 2);
+                bc_setbig(big, A[3]);
+                bc_printbigchar(big, 14, 34, 7, 2);
+
+                break;
+            case Up:
+
+                if (address / 10 == 0) break;
+                sc_memoryGet(address, &value);
+                mt_gotoXY(x, y);
+                mt_setbgcolor(9);
+                printf("0x%x", value);
+                x--;
+                address -= 10;
+                sc_memoryGet(address, &value);
+                mt_setbgcolor(4);
+                mt_gotoXY(x, y);
+                printf("0x%x", value);
+                mt_gotoXY(23, 1);
+
+                itoa(value, A);
+                bc_setbig(big, '+');
+                bc_printbigchar(big, 14, 2, 7, 2);
+                bc_setbig(big, A[0]);
+                bc_printbigchar(big, 14, 10, 7, 2);
+                bc_setbig(big, A[1]);
+                bc_printbigchar(big, 14, 18, 7, 2);
+                bc_setbig(big, A[2]);
+                bc_printbigchar(big, 14, 26, 7, 2);
+                bc_setbig(big, A[3]);
+                bc_printbigchar(big, 14, 34, 7, 2);
+
+                break;
+            case Down:
+
+                if (address / 10 == 9) break;
+                sc_memoryGet(address, &value);
+                mt_gotoXY(x, y);
+                mt_setbgcolor(9);
+                printf("0x%x", value);
+                x++;
+                address += 10;
+                sc_memoryGet(address, &value);
+                mt_setbgcolor(4);
+                mt_gotoXY(x, y);
+                printf("0x%x", value);
+                mt_gotoXY(23, 1);
 
 
-            itoa(value, A);
-            bc_setbig(big, '+');
-            bc_printbigchar (big,14, 2, 7, 2);
-            bc_setbig(big, A[0]);
-            bc_printbigchar (big,14, 10, 7, 2);
-            bc_setbig(big, A[1]);
-            bc_printbigchar (big,14, 18, 7, 2);
-            bc_setbig(big, A[2]);
-            bc_printbigchar (big,14, 26, 7, 2);
-            bc_setbig(big, A[3]);
-            bc_printbigchar (big,14, 34, 7, 2);
-            break;
-	    case Esc:
-	        break;
-	    case Save:
-	        f = fopen ("Save.out", "wb");
-            sc_memorySave(f);
-	        break;
-	    case Load:
-            f = fopen ("Save.out", "rb");
-            sc_memoryLoad(f);
-	        break;
-	    case F5:
-	        scanf ("%d", &value);
-            sc_memorySet(address, value);
-            mt_gotoXY(x, y);
-            mt_setbgcolor (4);
-            printf("0x%x",value);
-            itoa(value, A);
-            bc_setbig(big, '+');
-            bc_printbigchar (big,14, 2, 7, 2);
-            bc_setbig(big, A[0]);
-            bc_printbigchar (big,14, 10, 7, 2);
-            bc_setbig(big, A[1]);
-            bc_printbigchar (big,14, 18, 7, 2);
-            bc_setbig(big, A[2]);
-            bc_printbigchar (big,14, 26, 7, 2);
-            bc_setbig(big, A[3]);
-            bc_printbigchar (big,14, 34, 7, 2);
-            mt_setbgcolor (9);
-            mt_gotoXY(25, 1);
-            printf ("     ");
-	        break;
-		case Run:
-			Timer();
-			break;
-		case Reset:
-			Signal();
-			break;
-	}
+                itoa(value, A);
+                bc_setbig(big, '+');
+                bc_printbigchar(big, 14, 2, 7, 2);
+                bc_setbig(big, A[0]);
+                bc_printbigchar(big, 14, 10, 7, 2);
+                bc_setbig(big, A[1]);
+                bc_printbigchar(big, 14, 18, 7, 2);
+                bc_setbig(big, A[2]);
+                bc_printbigchar(big, 14, 26, 7, 2);
+                bc_setbig(big, A[3]);
+                bc_printbigchar(big, 14, 34, 7, 2);
+
+                break;
+            case Esc:
+                break;
+            case Save:
+
+                f = fopen("Save.out", "wb");
+                sc_memorySave(f);
+                break;
+            case Load:
+
+                f = fopen("Save.out", "rb");
+                sc_memoryLoad(f);
+                break;
+            case F5:
+
+                scanf("%d", &value);
+                sc_memorySet(address, value);
+                mt_gotoXY(x, y);
+                mt_setbgcolor(4);
+                printf("0x%x", value);
+                itoa(value, A);
+                bc_setbig(big, '+');
+                bc_printbigchar(big, 14, 2, 7, 2);
+                bc_setbig(big, A[0]);
+                bc_printbigchar(big, 14, 10, 7, 2);
+                bc_setbig(big, A[1]);
+                bc_printbigchar(big, 14, 18, 7, 2);
+                bc_setbig(big, A[2]);
+                bc_printbigchar(big, 14, 26, 7, 2);
+                bc_setbig(big, A[3]);
+                bc_printbigchar(big, 14, 34, 7, 2);
+                mt_setbgcolor(9);
+                mt_gotoXY(25, 1);
+                printf("     ");
+
+                break;
+            case Run:
+                Timer();
+                break;
+            case Reset:
+                Signal();
+                break;
+        }
+    }
+	if (key == Reset) {
+
+        Signal();
+    }
+	if (key == Esc) return 0;
 	mt_setbgcolor (9);
 	mt_gotoXY(23, 1);
 	return 0;

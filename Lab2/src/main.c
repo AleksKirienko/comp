@@ -36,6 +36,10 @@ int main()
     mt_gotoXY(4, 65);
     printf("InstructionCounter");
 
+    mt_gotoXY(5, 65);
+    mt_setbgcolor(9);
+    printf ("0x0");
+
     bc_box(7, 64, 3, 20);
     mt_gotoXY(7, 70);
     printf("Operation");
@@ -44,7 +48,7 @@ int main()
     mt_gotoXY(10, 70);
     printf("Flags");
     mt_gotoXY(11, 68);
-    printf("O E V M");
+    printf("O E V M T");
 
     bc_box(13, 44, 10, 20);
     mt_gotoXY(13, 50);
@@ -54,6 +58,14 @@ int main()
     printf("L  - load");
     mt_gotoXY(15, 45);
     printf("S  - save ");
+    mt_gotoXY(16, 45);
+    printf("i - Reset ");
+    mt_gotoXY(17, 45);
+    printf("r - Run");
+    mt_gotoXY(18, 45);
+    printf("Esc - escape ");
+    mt_gotoXY(19, 45);
+    printf("F5 - enter chars");
 
     bc_box(13, 1, 10, 42);
     bc_setbig(big, '+');
