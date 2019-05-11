@@ -377,7 +377,7 @@ int read_key(enum keys key)
         Instr = address;
         mt_gotoXY(5, 65);
         mt_setbgcolor(9);
-        printf ("0x%d", Instr);
+        printf ("0x%d ", Instr);
 
         mt_gotoXY(11, 76);
         mt_setbgcolor(4);
@@ -404,7 +404,12 @@ int read_key(enum keys key)
                 mt_gotoXY(23, 1);
 
                 itoa(value, A);
-                 print (value, A);
+                print (value, A);
+
+                Instr = address;
+                mt_gotoXY(5, 65);
+                mt_setbgcolor(9);
+                printf ("0x%d ", Instr);
 
                 break;
             case Left:
@@ -423,8 +428,12 @@ int read_key(enum keys key)
                 mt_gotoXY(23, 1);
 
                 itoa(value, A);
-                 print (value, A);
+                print (value, A);
 
+                Instr = address;
+                mt_gotoXY(5, 65);
+                mt_setbgcolor(9);
+                printf ("0x%d ", Instr);
                 break;
             case Up:
 
@@ -442,7 +451,12 @@ int read_key(enum keys key)
                 mt_gotoXY(23, 1);
 
                 itoa(value, A);
-                 print (value, A);
+                print (value, A);
+
+                Instr = address;
+                mt_gotoXY(5, 65);
+                mt_setbgcolor(9);
+                printf ("0x%d ", Instr);
 
                 break;
             case Down:
@@ -460,9 +474,13 @@ int read_key(enum keys key)
                 printf("0x%x", value);
                 mt_gotoXY(23, 1);
 
-
                 itoa(value, A);
                 print (value, A);
+
+                Instr = address;
+                mt_gotoXY(5, 65);
+                mt_setbgcolor(9);
+                printf ("0x%d ", Instr);
 
                 break;
             case Esc:
