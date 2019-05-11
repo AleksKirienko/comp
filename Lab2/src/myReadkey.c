@@ -7,6 +7,36 @@
 int address = 0;
 int x = 2, y = 2;
 int Instr = 0;
+void print (int value, char* A)
+{
+	if (value == 0)
+    		{
+		bc_setbig(big, '+');
+		bc_printbigchar (big,14, 2, 7, 2);
+    		bc_setbig(big, '0');
+    		bc_printbigchar (big,14, 10, 7, 2);
+    		bc_setbig(big, '0');
+    		bc_printbigchar (big,14, 18, 7, 2);
+    		bc_setbig(big, '0');
+   		bc_printbigchar (big,14, 26, 7, 2);
+    		bc_setbig(big, '0');
+    		bc_printbigchar (big,14, 34, 7, 2);
+    	
+		}
+	else 
+	{
+		bc_setbig(big, ' ');
+		bc_printbigchar (big,14, 2, 7, 2);
+    		bc_setbig(big, A[0]);
+    		bc_printbigchar (big,14, 10, 7, 2);
+    		bc_setbig(big, A[1]);
+    		bc_printbigchar (big,14, 18, 7, 2);
+    		bc_setbig(big, A[2]);
+    		bc_printbigchar (big,14, 26, 7, 2);
+    		bc_setbig(big, A[3]);
+    		bc_printbigchar (big,14, 34, 7, 2);
+	}
+}
 int rk_mytermsave ()
 {
 	struct termios term;
@@ -260,16 +290,7 @@ void shandler(int signo)
         //mt_gotoXY(23, 1);
     }
     itoa(value, A);
-    bc_setbig(big, '+');
-    bc_printbigchar (big,14, 2, 7, 2);
-    bc_setbig(big, A[0]);
-    bc_printbigchar (big,14, 10, 7, 2);
-    bc_setbig(big, A[1]);
-    bc_printbigchar (big,14, 18, 7, 2);
-    bc_setbig(big, A[2]);
-    bc_printbigchar (big,14, 26, 7, 2);
-    bc_setbig(big, A[3]);
-    bc_printbigchar (big,14, 34, 7, 2);
+	print (value, A);
 }
 
 void Signal(void)
@@ -347,16 +368,7 @@ int read_key(enum keys key)
                 mt_gotoXY(23, 1);
 
                 itoa(value, A);
-                bc_setbig(big, '+');
-                bc_printbigchar(big, 14, 2, 7, 2);
-                bc_setbig(big, A[0]);
-                bc_printbigchar(big, 14, 10, 7, 2);
-                bc_setbig(big, A[1]);
-                bc_printbigchar(big, 14, 18, 7, 2);
-                bc_setbig(big, A[2]);
-                bc_printbigchar(big, 14, 26, 7, 2);
-                bc_setbig(big, A[3]);
-                bc_printbigchar(big, 14, 34, 7, 2);
+                 print (value, A);
 
                 break;
             case Left:
@@ -375,16 +387,7 @@ int read_key(enum keys key)
                 mt_gotoXY(23, 1);
 
                 itoa(value, A);
-                bc_setbig(big, '+');
-                bc_printbigchar(big, 14, 2, 7, 2);
-                bc_setbig(big, A[0]);
-                bc_printbigchar(big, 14, 10, 7, 2);
-                bc_setbig(big, A[1]);
-                bc_printbigchar(big, 14, 18, 7, 2);
-                bc_setbig(big, A[2]);
-                bc_printbigchar(big, 14, 26, 7, 2);
-                bc_setbig(big, A[3]);
-                bc_printbigchar(big, 14, 34, 7, 2);
+                 print (value, A);
 
                 break;
             case Up:
@@ -403,16 +406,7 @@ int read_key(enum keys key)
                 mt_gotoXY(23, 1);
 
                 itoa(value, A);
-                bc_setbig(big, '+');
-                bc_printbigchar(big, 14, 2, 7, 2);
-                bc_setbig(big, A[0]);
-                bc_printbigchar(big, 14, 10, 7, 2);
-                bc_setbig(big, A[1]);
-                bc_printbigchar(big, 14, 18, 7, 2);
-                bc_setbig(big, A[2]);
-                bc_printbigchar(big, 14, 26, 7, 2);
-                bc_setbig(big, A[3]);
-                bc_printbigchar(big, 14, 34, 7, 2);
+                 print (value, A);
 
                 break;
             case Down:
@@ -432,16 +426,7 @@ int read_key(enum keys key)
 
 
                 itoa(value, A);
-                bc_setbig(big, '+');
-                bc_printbigchar(big, 14, 2, 7, 2);
-                bc_setbig(big, A[0]);
-                bc_printbigchar(big, 14, 10, 7, 2);
-                bc_setbig(big, A[1]);
-                bc_printbigchar(big, 14, 18, 7, 2);
-                bc_setbig(big, A[2]);
-                bc_printbigchar(big, 14, 26, 7, 2);
-                bc_setbig(big, A[3]);
-                bc_printbigchar(big, 14, 34, 7, 2);
+                print (value, A);
 
                 break;
             case Esc:
@@ -464,16 +449,7 @@ int read_key(enum keys key)
                 mt_setbgcolor(4);
                 printf("0x%x", value);
                 itoa(value, A);
-                bc_setbig(big, '+');
-                bc_printbigchar(big, 14, 2, 7, 2);
-                bc_setbig(big, A[0]);
-                bc_printbigchar(big, 14, 10, 7, 2);
-                bc_setbig(big, A[1]);
-                bc_printbigchar(big, 14, 18, 7, 2);
-                bc_setbig(big, A[2]);
-                bc_printbigchar(big, 14, 26, 7, 2);
-                bc_setbig(big, A[3]);
-                bc_printbigchar(big, 14, 34, 7, 2);
+                 print (value, A);
                 mt_setbgcolor(9);
                 mt_gotoXY(25, 1);
                 printf("     ");
