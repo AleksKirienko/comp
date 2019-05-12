@@ -7,6 +7,7 @@
 int address = 0;
 int x = 2, y = 2;
 int Instr = 0;
+
 void print (int value, char* A)
 {
 	if (value == 0)
@@ -147,7 +148,7 @@ int rk_readkey (enum keys *key)
         *key = Down;
     else if (!strcmp(A, "\E[D"))
         *key = Left;
-    else if (!strcmp(A, "\E["))
+    else if (!strcmp(A, "q"))
         *key= Esc;
     else if (!strcmp(A, "i"))
         *key= Reset;
@@ -164,7 +165,6 @@ int rk_readkey (enum keys *key)
 
     rk_mytermregime(1, 1, 1, 1, 1);
     read_key(*key);
-    printf("%s ",A);
     return 0;
 }
 
@@ -247,7 +247,7 @@ void printGUI (void)
     mt_gotoXY(17, 45);
     printf("r - Run");
     mt_gotoXY(18, 45);
-    printf("Esc - escape ");
+    printf("q - escape ");
     mt_gotoXY(19, 45);
     printf("F5 - enter chars");
 
@@ -266,6 +266,7 @@ void printGUI (void)
     bc_printbigchar (big,14, 26, 7, 2);
     bc_setbig(big, '0');
     bc_printbigchar (big,14, 34, 7, 2);
+	mt_gotoXY(23, 1);
 }
 
 void sighandler (int signo)
@@ -276,7 +277,7 @@ void sighandler (int signo)
 	printGUI();
 }
 
-void shandler(int signo)
+void signalhandler(int signo)
 {
     int value;
     char A[4];
@@ -327,6 +328,7 @@ void shandler(int signo)
     }
     itoa(value, A);
 	print (value, A);
+	alarm(1);
 }
 
 void Signal(void)
@@ -354,12 +356,12 @@ void Timer (void)
 {
     sc_regSet(T, 1);
     struct itimerval nval, oval;
-    signal (SIGALRM, shandler);
+    signal (SIGALRM, signalhandler);
 
     nval.it_interval.tv_sec = 1;
-    nval.it_interval.tv_usec = 1;
-    nval.it_value.tv_sec = 1;
-    nval.it_value.tv_usec = 0;
+	nval.it_interval.tv_usec = 0;
+	nval.it_value.tv_sec = 1;
+	nval.it_value.tv_usec = 0;
 
     setitimer (ITIMER_REAL, &nval, &oval);
 }
@@ -372,7 +374,7 @@ int read_key(enum keys key)
 	int big[2];
 	sc_regGet (T, &value);
 	if (value == 1 && key != Reset){
-	    Timer();
+	    signal (SIGALRM, signalhandler);
 
         Instr = address;
         mt_gotoXY(5, 65);
@@ -383,10 +385,9 @@ int read_key(enum keys key)
         mt_setbgcolor(4);
         printf("T");
         mt_gotoXY(25, 1);
-
+	
         return 0;
 	}
-    if (value == 0) {
         switch (key) {
             case Right:
 
@@ -401,7 +402,7 @@ int read_key(enum keys key)
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 printf("0x%x", value);
-                mt_gotoXY(23, 1);
+                mt_gotoXY(30, 1);
 
                 itoa(value, A);
                 print (value, A);
@@ -425,7 +426,7 @@ int read_key(enum keys key)
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 printf("0x%x", value);
-                mt_gotoXY(23, 1);
+                mt_gotoXY(30, 1);
 
                 itoa(value, A);
                 print (value, A);
@@ -448,7 +449,7 @@ int read_key(enum keys key)
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 printf("0x%x", value);
-                mt_gotoXY(23, 1);
+                mt_gotoXY(30, 1);
 
                 itoa(value, A);
                 print (value, A);
@@ -472,7 +473,7 @@ int read_key(enum keys key)
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 printf("0x%x", value);
-                mt_gotoXY(23, 1);
+                mt_gotoXY(30, 1);
 
                 itoa(value, A);
                 print (value, A);
@@ -505,9 +506,9 @@ int read_key(enum keys key)
                 itoa(value, A);
                  print (value, A);
                 mt_setbgcolor(9);
-                mt_gotoXY(25, 1);
-                printf("     ");
-
+                mt_gotoXY(23, 10);
+                printf("            ");
+				mt_gotoXY(23, 10);
                 break;
             case Run:
                 Timer();
@@ -516,13 +517,14 @@ int read_key(enum keys key)
                 Signal();
                 break;
         }
-    }
 	if (key == Reset) {
 
         Signal();
     }
 	if (key == Esc) return 0;
 	mt_setbgcolor (9);
+	mt_gotoXY(23, 1);
+	printf("            ");
 	mt_gotoXY(23, 1);
 	return 0;
 }
