@@ -26,7 +26,6 @@ typedef struct LBA {
 typedef struct PART {
     int activ;
     tCHS beg;
-    int os;
     tCHS end;
     tLBA lba_beg;
     int size;

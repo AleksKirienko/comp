@@ -1,6 +1,6 @@
 CXX=gcc
-CFLAGS = -c -Wall -std=c99
-FLAGS  =  -Wall -std=c99
+CFLAGS = -c -std=c99
+FLAGS  =  -std=c99
 OBJECTS = build/main.o build/lib.o
 
 .PHONY: clean all bin build  bin/prog
