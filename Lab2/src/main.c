@@ -113,6 +113,8 @@ int main()
     enum keys key;
     setbuf(stdout, NULL);
 
+    mt_setbgcolor(9);
+    mt_setfgcolor(9);
     while (key != Esc)
         rk_readkey(&key);
     return 0;

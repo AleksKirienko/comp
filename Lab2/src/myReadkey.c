@@ -7,6 +7,7 @@
 int address = 0;
 int x = 2, y = 2;
 int Instr = 0;
+int valacc = 0;
 
 void print (int value, char* A)
 {
@@ -156,10 +157,12 @@ int rk_readkey (enum keys *key)
         *key= Save;
     else if (!strcmp(A, "l"))
         *key= Load;
-    else if (!strcmp(A, "\E[15~"))
-        *key= F5;
+    else if (!strcmp(A, "e"))
+        *key= Enter;
     else if (!strcmp(A, "\E[17~"))
         *key= F6;
+    else if (!strcmp(A, "\E[15~"))
+        *key= F5;
 
     rk_mytermregime(1, 1, 1, 1, 1);
     read_key(*key);
@@ -256,7 +259,7 @@ void printGUI (void)
     mt_gotoXY(18, 45);
     printf("q - escape ");
     mt_gotoXY(19, 45);
-    printf("F5 - enter chars");
+    printf("e - enter chars");
 
 
     bc_box(13, 1, 10, 42);
@@ -503,19 +506,18 @@ int read_key(enum keys key)
                 f = fopen("Save.out", "rb");
                 sc_memoryLoad(f);
                 break;
-            case F5:
-
+            case Enter:
                 scanf("%d", &value);
 
-		while (value>65535)
-		{
-			mt_gotoXY(23, 1);
-			printf ("Error       ");
-			mt_gotoXY(24, 1);
- 			printf("            ");
-			mt_gotoXY(24, 1);
-			scanf("%d", &value);
-		}
+                while (value>65535)
+                {
+                    mt_gotoXY(23, 1);
+                    printf ("Error       ");
+                    mt_gotoXY(24, 1);
+                    printf("            ");
+                    mt_gotoXY(24, 1);
+                    scanf("%d", &value);
+                }
                 sc_memorySet(address, value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(4);
@@ -525,9 +527,9 @@ int read_key(enum keys key)
                 mt_setbgcolor(9);
                 mt_gotoXY(23, 10);
                 printf("            ");
-		mt_gotoXY(24, 1);
+		        mt_gotoXY(24, 1);
                 printf("            ");
-		mt_gotoXY(23, 10);
+		        mt_gotoXY(23, 10);
                 break;
             case Run:
                 Timer();
@@ -535,6 +537,23 @@ int read_key(enum keys key)
             case Reset:
                 Signal();
                 break;
+            case F5:
+                scanf("%d", &valacc);
+                while (valacc>65535)
+                {
+                    mt_gotoXY(23, 1);
+                    printf ("Error       ");
+                    mt_gotoXY(24, 1);
+                    printf("            ");
+                    mt_gotoXY(24, 1);
+                    scanf("%d", &valacc);
+                }
+                mt_gotoXY(2, 67);
+                if (valacc < 32768) printf ("+");
+                else printf (" ");
+                printf("%x   ", valacc);
+                break;
+
         }
 	if (key == Reset) {
 
