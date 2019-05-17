@@ -12,7 +12,8 @@ void printMas() {
     for (int i = 0; i < N; i++)
     {
         mt_gotoXY(i/10 + 2, (i % 10)*6+2 );
-        printf("0x%x ", A[i]);
+        if (A[i]<32768)  printf("+");
+        printf("%x", A[i]);
     }
 }
 

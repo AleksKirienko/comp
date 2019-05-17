@@ -22,7 +22,8 @@ int main()
 
     mt_gotoXY(2, 2);
     mt_setbgcolor (4);
-    printf("0x%x",value);
+    if (value<32768)  printf("+");
+    printf("%x",value);
     mt_setbgcolor (9);
     mt_gotoXY(1, 28);
 

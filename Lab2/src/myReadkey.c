@@ -12,23 +12,30 @@ void print (int value, char* A)
 {
 
 	if (value == 0)
-    		{
+	{
 		bc_setbig(big, '+');
 		bc_printbigchar (big,14, 2, 7, 2);
-    		bc_setbig(big, '0');
+		bc_setbig(big, '0');
     		bc_printbigchar (big,14, 10, 7, 2);
     		bc_setbig(big, '0');
     		bc_printbigchar (big,14, 18, 7, 2);
     		bc_setbig(big, '0');
-   		bc_printbigchar (big,14, 26, 7, 2);
+    		bc_printbigchar (big,14, 26, 7, 2);
     		bc_setbig(big, '0');
     		bc_printbigchar (big,14, 34, 7, 2);
-    	
-		}
+	}
 	else 
 	{
-		bc_setbig(big, ' ');
-		bc_printbigchar (big,14, 2, 7, 2);
+		if (value < 32768)
+    		{
+			bc_setbig(big, '+');
+			bc_printbigchar (big,14, 2, 7, 2);
+		}
+		else 
+		{
+			bc_setbig(big, ' ');
+			bc_printbigchar (big,14, 2, 7, 2);
+ 		}
 		if (A[3] <= 'F' && A[3]>='0')
     		{
 			bc_setbig(big, A[0]);
@@ -181,7 +188,8 @@ void reverse(char s[])
 void itoa(int n, char s[])
 {
     int i, sign;
-
+	for (i = 0;i<4;i++)
+		s[i]=' ';
     if ((sign = n) < 0)  
         n = -n;          
     i = 0;
@@ -217,7 +225,8 @@ void printGUI (void)
     sc_memoryGet(0, &value);
     mt_gotoXY(2, 2);
     mt_setbgcolor (4);
-    printf("0x%x",value);
+	if (value<32768)  printf("+");
+    printf("%x",value);
     mt_setbgcolor (9);
     mt_gotoXY(1, 28);
 
@@ -295,7 +304,8 @@ void signalhandler(int signo)
         sc_memoryGet(address, &value);
         mt_gotoXY(x, y);
         mt_setbgcolor(9);
-        printf("0x%x", value);
+	if (value<32768)  printf("+");
+        printf("%x", value);
         x = 2;
         y = 2;
         address=0;
@@ -303,34 +313,39 @@ void signalhandler(int signo)
         sc_memoryGet(address, &value);
         mt_setbgcolor(4);
         mt_gotoXY(x, y);
-        printf("0x%x", value);
+        if (value<32768)  printf("+");
+        printf("%x", value);
     }
     if (address % 10 == 9)
     {
         sc_memoryGet(address, &value);
         mt_gotoXY(x, y);
         mt_setbgcolor(9);
-        printf("0x%x", value);
+        if (value<32768)  printf("+");
+        printf("%x", value);
         y = 2;
         x++;
         address++;
         sc_memoryGet(address, &value);
         mt_setbgcolor(4);
         mt_gotoXY(x, y);
-        printf("0x%x", value);
+        if (value<32768)  printf("+");
+        printf("%x", value);
     }
     else
      {
         sc_memoryGet(address, &value);
         mt_gotoXY(x, y);
         mt_setbgcolor(9);
-        printf("0x%x", value);
+        if (value<32768)  printf("+");
+        printf("%x", value);
         y += 6;
         address++;
         sc_memoryGet(address, &value);
         mt_setbgcolor(4);
         mt_gotoXY(x, y);
-        printf("0x%x", value);
+        if (value<32768)  printf("+");
+        printf("%x", value);
         //mt_gotoXY(23, 1);
     }
     itoa(value, A);
@@ -346,7 +361,8 @@ void Signal(void)
     sc_memoryGet(address, &value);
     mt_gotoXY(x, y);
     mt_setbgcolor(9);
-    printf("0x%x", value);
+    if (value<32768)  printf("+");
+        printf("%x", value);
     x = 2;
     y = 2;
     address = 0;
@@ -402,13 +418,15 @@ int read_key(enum keys key)
                 sc_memoryGet(address, &value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 y += 6;
                 address++;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -426,13 +444,15 @@ int read_key(enum keys key)
                 sc_memoryGet(address, &value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 y -= 6;
                 address--;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
-                printf("0x%x", value);
+               if (value<32768)  printf("+");
+        	printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -449,13 +469,15 @@ int read_key(enum keys key)
                 sc_memoryGet(address, &value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 x--;
                 address -= 10;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -473,13 +495,15 @@ int read_key(enum keys key)
                 sc_memoryGet(address, &value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 x++;
                 address += 10;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -519,7 +543,8 @@ int read_key(enum keys key)
                 sc_memorySet(address, value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(4);
-                printf("0x%x", value);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
                 itoa(value, A);
                  print (value, A);
                 mt_setbgcolor(9);
@@ -528,6 +553,44 @@ int read_key(enum keys key)
 		mt_gotoXY(24, 1);
                 printf("            ");
 		mt_gotoXY(23, 10);
+                break;
+	case F6:
+		sc_memoryGet(address, &value);               
+		int x = address;
+                                                                            
+                scanf("%d", &address);
+
+		if (address>99)
+		{
+			mt_gotoXY(11, 74);
+        		mt_setbgcolor(4);
+        		printf("M");
+			address=x;
+        		mt_gotoXY(25, 1);
+			break;
+		}
+
+                mt_gotoXY(x, y);
+                mt_setbgcolor(9);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
+		sc_memoryGet(address, &value);
+                mt_setbgcolor(4);
+		x=2+address/10;
+		y = 2+address%10*6;
+                mt_gotoXY(x, y);
+                if (value<32768)  printf("+");
+        	printf("%x", value);
+                mt_gotoXY(30, 1);
+
+                itoa(value, A);
+                print (value, A);
+
+                Instr = address;
+                mt_gotoXY(5, 65);
+                mt_setbgcolor(9);
+                printf ("0x%x ", Instr);
+
                 break;
             case Run:
                 Timer();
