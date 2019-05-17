@@ -22,7 +22,8 @@ int main()
 
     mt_gotoXY(2, 2);
     mt_setbgcolor (4);
-    printf("0x%x",value);
+    if (value<32768)  printf("+");
+    printf("%x",value);
     mt_setbgcolor (9);
     mt_gotoXY(1, 28);
 
@@ -38,11 +39,15 @@ int main()
 
     mt_gotoXY(5, 65);
     mt_setbgcolor(9);
-    printf ("0x0");
+    printf ("+0");
 
     bc_box(7, 64, 3, 20);
     mt_gotoXY(7, 70);
     printf("Operation");
+	mt_gotoXY(8, 71);
+	int command,operand;
+	sc_commandDecode(value, &command, &operand);
+	printf("%x;%x",command,operand);
 
     bc_box(10, 64, 3, 20);
     mt_gotoXY(10, 70);
@@ -63,14 +68,16 @@ int main()
     mt_gotoXY(17, 45);
     printf("r - Run");
     mt_gotoXY(18, 45);
-    printf("Esc - escape ");
+    printf("q - escape ");
     mt_gotoXY(19, 45);
     printf("F5 - enter chars");
+mt_gotoXY(20, 45);
+    printf("F6 - enter address");
+mt_gotoXY(21, 45);
+    printf("T - Step");
 
     bc_box(13, 1, 10, 42);
     bc_setbig(big, '+');
-    bc_setbigcharpos (big, 4, 1, 0);
-    bc_setbigcharpos (big, 1, 1, 1);
 
     bc_printbigchar (big,14, 2, 7, 2);
     bc_setbig(big, '0');

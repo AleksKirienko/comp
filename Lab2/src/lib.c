@@ -12,7 +12,8 @@ void printMas() {
     for (int i = 0; i < N; i++)
     {
         mt_gotoXY(i/10 + 2, (i % 10)*6+2 );
-        printf("0x%x ", A[i]);
+        if (A[i]<32768)  printf("+");
+        printf("%x", A[i]);
     }
 }
 
@@ -91,17 +92,16 @@ int sc_regGet (int registor,int *value)
 }
 int sc_commandEncode(int command, int operand, int *value)
 {
-  int r=0;
-    if (command == 10 || command == 11 || command == 20 || command == 21 || (command > 29 && command < 34) || (command > 39 && command < 44) || (command > 50 && command < 77)) {
+  	int r=0;
+	*value = command << 7;
+	*value|= operand;
+    if (command == 10 || command == 11 || command == 20 || command == 21 || (command > 29 && command < 34) || (command > 39 && command < 44) || (command > 50 && command < 77)) 
+	{
         if (operand < 128)
-	 {
-	   *value = command << 7;
-	   
-	   *value|= operand;
-           
-            printf ("%d",*value);
+	 	{
+           // printf ("%d",*value);
 		
-            printf ("\n");
+           // printf ("\n");
             return 1;
         }
     }
@@ -109,14 +109,19 @@ int sc_commandEncode(int command, int operand, int *value)
 }
 int sc_commandDecode(int value, int *command, int *operand)
 {
-int r = 0;
-  *command = (value >> 7);
-if (*command == 10 || *command == 11 || *command == 20 || *command == 21 || (*command > 29 && *command < 34) || (*command > 39 && *command < 44) || (*command > 50 && *command < 77)) {
-  *operand = value&(~(value << 7));
+	int r = 0;
+  	*command = (value >> 7);
+	*operand = value&(~(value << 7));
+	if (*command == 10 || *command == 11 || *command == 20 || *command == 21 || (*command > 29 && *command < 34) || (*command > 39 && *command < 44) || (*command > 50 && *command < 77)) 
+	{
+  		return 1;
     }
-else {sc_regSet (r,E); return -1;}
-    printf ("%d\n",*operand);
-    printf ("%d\n",*command);
-    return 1;
+	else 
+	{
+		sc_regSet (r,E); 
+		return -1;
+	}
+   // printf ("%d\n",*operand);
+   // printf ("%d\n",*command);
 	
 }
