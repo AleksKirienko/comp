@@ -167,6 +167,8 @@ int rk_readkey (enum keys *key)
         *key= F5;
     else if (!strcmp(A, "\E[17~"))
         *key= F6;
+    else if (!strcmp(A, "t"))
+        *key= Step;
 
     rk_mytermregime(1, 1, 1, 1, 1);
     read_key(*key);
@@ -226,6 +228,7 @@ void printGUI (void)
     mt_gotoXY(2, 2);
     mt_setbgcolor (4);
 	if (value<32768)  printf("+");
+	else printf(" ");
     printf("%x",value);
     mt_setbgcolor (9);
     mt_gotoXY(1, 28);
@@ -243,6 +246,10 @@ void printGUI (void)
     bc_box(7, 64, 3, 20);
     mt_gotoXY(7, 70);
     printf("Operation");
+	mt_gotoXY(8, 71);
+	int command,operand;
+	sc_commandDecode(value, &command, &operand);
+	printf("%x;%x",command,operand);
 
     bc_box(10, 64, 3, 20);
     mt_gotoXY(10, 70);
@@ -266,6 +273,10 @@ void printGUI (void)
     printf("q - escape ");
     mt_gotoXY(19, 45);
     printf("F5 - enter chars");
+	mt_gotoXY(20, 45);
+    printf("F6 - enter address");
+	mt_gotoXY(21, 45);
+    printf("T - Step");
 
 
     bc_box(13, 1, 10, 42);
@@ -301,20 +312,17 @@ void signalhandler(int signo)
 
     if (address == 99)
     {
-        sc_memoryGet(address, &value);
-        mt_gotoXY(x, y);
-        mt_setbgcolor(9);
-	if (value<32768)  printf("+");
-        printf("%x", value);
-        x = 2;
-        y = 2;
-        address=0;
+        alarm (0);
 
-        sc_memoryGet(address, &value);
-        mt_setbgcolor(4);
-        mt_gotoXY(x, y);
-        if (value<32768)  printf("+");
-        printf("%x", value);
+	Instr = address;
+    mt_gotoXY(5, 65);
+    mt_setbgcolor(9);
+    printf ("+%x ", Instr);
+	mt_gotoXY(8, 71);
+	int command,operand;
+	sc_commandDecode(value, &command, &operand);
+	printf("%x;%x",command,operand);
+	return;
     }
     if (address % 10 == 9)
     {
@@ -322,6 +330,7 @@ void signalhandler(int signo)
         mt_gotoXY(x, y);
         mt_setbgcolor(9);
         if (value<32768)  printf("+");
+		else printf(" ");
         printf("%x", value);
         y = 2;
         x++;
@@ -330,7 +339,17 @@ void signalhandler(int signo)
         mt_setbgcolor(4);
         mt_gotoXY(x, y);
         if (value<32768)  printf("+");
+		else printf(" ");
         printf("%x", value);
+
+		Instr = address;
+		mt_gotoXY(5, 65);
+        mt_setbgcolor(9);
+        printf ("+%x ", Instr);
+		mt_gotoXY(8, 71);
+		int command,operand;
+		sc_commandDecode(value, &command, &operand);
+		printf("%x;%x",command,operand);
     }
     else
      {
@@ -338,6 +357,7 @@ void signalhandler(int signo)
         mt_gotoXY(x, y);
         mt_setbgcolor(9);
         if (value<32768)  printf("+");
+		else printf(" ");
         printf("%x", value);
         y += 6;
         address++;
@@ -345,7 +365,16 @@ void signalhandler(int signo)
         mt_setbgcolor(4);
         mt_gotoXY(x, y);
         if (value<32768)  printf("+");
+		else printf(" ");
         printf("%x", value);
+		Instr = address;
+        mt_gotoXY(5, 65);
+        mt_setbgcolor(9);
+        printf ("+%x ", Instr);
+		mt_gotoXY(8, 71);
+		int command,operand;
+		sc_commandDecode(value, &command, &operand);
+		printf("%x;%x",command,operand);
         //mt_gotoXY(23, 1);
     }
     itoa(value, A);
@@ -362,7 +391,8 @@ void Signal(void)
     mt_gotoXY(x, y);
     mt_setbgcolor(9);
     if (value<32768)  printf("+");
-        printf("%x", value);
+	else printf(" ");
+    printf("%x", value);
     x = 2;
     y = 2;
     address = 0;
@@ -373,7 +403,11 @@ void Signal(void)
     Instr = 0;
     mt_gotoXY(5, 65);
     mt_setbgcolor(9);
-    printf ("0x%x", Instr);
+    printf ("+%x", Instr);
+	mt_gotoXY(8, 71);
+	int command,operand;
+	sc_commandDecode(value, &command, &operand);
+	printf("%x;%x",command,operand);
 }
 void Timer (void)
 {
@@ -402,7 +436,7 @@ int read_key(enum keys key)
         Instr = address;
         mt_gotoXY(5, 65);
         mt_setbgcolor(9);
-        printf ("0x%x ", Instr);
+        printf ("+%x ", Instr);
 
         mt_gotoXY(11, 76);
         mt_setbgcolor(4);
@@ -419,14 +453,16 @@ int read_key(enum keys key)
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 y += 6;
                 address++;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -435,7 +471,11 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%x ", Instr);
+                printf ("+%x ", Instr);
+				mt_gotoXY(8, 71);
+				int command,operand;
+				sc_commandDecode(value, &command, &operand);
+				printf("%x;%x",command,operand);
 
                 break;
             case Left:
@@ -445,14 +485,16 @@ int read_key(enum keys key)
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 y -= 6;
                 address--;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
-               if (value<32768)  printf("+");
-        	printf("%x", value);
+                if (value<32768)  printf("+");
+				else printf(" ");
+        		printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -461,7 +503,11 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%x ", Instr);
+                printf ("+%x ", Instr);
+				mt_gotoXY(8, 71);
+				//int command,operand;
+				sc_commandDecode(value, &command, &operand);
+				printf("%x;%x",command,operand);
                 break;
             case Up:
 
@@ -470,14 +516,16 @@ int read_key(enum keys key)
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        	    printf("%x", value);
                 x--;
                 address -= 10;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -486,8 +534,11 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%x ", Instr);
-
+                printf ("+%x ", Instr);
+				mt_gotoXY(8, 71);
+				//int command,operand;
+				sc_commandDecode(value, &command, &operand);
+				printf("%x;%x",command,operand);
                 break;
             case Down:
 
@@ -496,14 +547,16 @@ int read_key(enum keys key)
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 x++;
                 address += 10;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
                 mt_gotoXY(x, y);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -512,8 +565,11 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%x ", Instr);
-
+                printf ("+%x ", Instr);
+				mt_gotoXY(8, 71);
+				//int command,operand;
+				sc_commandDecode(value, &command, &operand);
+				printf("%x;%x",command,operand);
                 break;
             case Esc:
                 break;
@@ -540,20 +596,25 @@ int read_key(enum keys key)
 			mt_gotoXY(24, 1);
 			scanf("%d", &value);
 		}
-                sc_memorySet(address, value);
-                mt_gotoXY(x, y);
-                mt_setbgcolor(4);
-                if (value<32768)  printf("+");
-        	printf("%x", value);
-                itoa(value, A);
-                 print (value, A);
-                mt_setbgcolor(9);
-                mt_gotoXY(23, 10);
-                printf("            ");
+        sc_memorySet(address, value);
+        mt_gotoXY(x, y);
+        mt_setbgcolor(4);
+        if (value<32768)  printf("+");
+		else printf(" ");
+        printf("%x", value);
+        itoa(value, A);
+        print (value, A);
+        mt_setbgcolor(9);
+        mt_gotoXY(23, 10);
+        printf("            ");
 		mt_gotoXY(24, 1);
-                printf("            ");
+        printf("            ");
 		mt_gotoXY(23, 10);
-                break;
+		mt_gotoXY(8, 71);
+		//int command,operand;
+		sc_commandDecode(value, &command, &operand);
+		printf("%x;%x",command,operand);
+        break;
 	case F6:
 		sc_memoryGet(address, &value);               
 		int x1 = address;
@@ -562,6 +623,7 @@ int read_key(enum keys key)
 
 		if (address>99)
 		{
+			sc_regSet(M, 1);
 			mt_gotoXY(11, 74);
         		mt_setbgcolor(4);
         		printf("M");
@@ -573,14 +635,16 @@ int read_key(enum keys key)
                 mt_gotoXY(x, y);
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
-		sc_memoryGet(address, &value);
+				else printf(" ");
+        		printf("%x", value);
+				sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
-		x=2+address/10;
-		y = 2+address%10*6;
+				x=2+address/10;
+				y = 2+address%10*6;
                 mt_gotoXY(x, y);
                 if (value<32768)  printf("+");
-        	printf("%x", value);
+				else printf(" ");
+        		printf("%x", value);
                 mt_gotoXY(30, 1);
 
                 itoa(value, A);
@@ -589,7 +653,11 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%x ", Instr);
+                printf ("+%x ", Instr);
+				mt_gotoXY(8, 71);
+				//int command,operand;
+				sc_commandDecode(value, &command, &operand);
+				printf("%x;%x",command,operand);
 
                 break;
             case Run:
@@ -597,6 +665,11 @@ int read_key(enum keys key)
                 break;
             case Reset:
                 Signal();
+		break;
+	    case Step:
+
+		signalhandler(SIGALRM);
+		alarm (0);
                 break;
         }
 	if (key == Reset) {
