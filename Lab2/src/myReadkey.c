@@ -556,7 +556,7 @@ int read_key(enum keys key)
                 break;
 	case F6:
 		sc_memoryGet(address, &value);               
-		int x = address;
+		int x1 = address;
                                                                             
                 scanf("%d", &address);
 
@@ -565,7 +565,7 @@ int read_key(enum keys key)
 			mt_gotoXY(11, 74);
         		mt_setbgcolor(4);
         		printf("M");
-			address=x;
+			address=x1;
         		mt_gotoXY(25, 1);
 			break;
 		}
