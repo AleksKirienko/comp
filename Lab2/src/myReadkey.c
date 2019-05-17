@@ -10,6 +10,7 @@ int Instr = 0;
 
 void print (int value, char* A)
 {
+
 	if (value == 0)
     		{
 		bc_setbig(big, '+');
@@ -28,7 +29,7 @@ void print (int value, char* A)
 	{
 		bc_setbig(big, ' ');
 		bc_printbigchar (big,14, 2, 7, 2);
-		if (A[3] <= '9' && A[3]>='0')
+		if (A[3] <= 'F' && A[3]>='0')
     		{
 			bc_setbig(big, A[0]);
     			bc_printbigchar (big,14, 10, 7, 2);
@@ -39,7 +40,7 @@ void print (int value, char* A)
     			bc_setbig(big, A[3]);
     			bc_printbigchar (big,14, 34, 7, 2);
 		}
-		else if (A[2] <= '9' && A[2]>='0')
+		else if (A[2] <= 'F' && A[2]>='0')
     		{
 			bc_setbig(big, A[3]);
     			bc_printbigchar (big,14, 10, 7, 2);
@@ -50,7 +51,7 @@ void print (int value, char* A)
     			bc_setbig(big, A[2]);
     			bc_printbigchar (big,14, 34, 7, 2);
 		}
-		else if (A[1] <= '9' && A[1]>='0')
+		else if (A[1] <= 'F' && A[1]>='0')
     		{
 			bc_setbig(big, A[2]);
     			bc_printbigchar (big,14, 10, 7, 2);
@@ -61,7 +62,7 @@ void print (int value, char* A)
     			bc_setbig(big, A[1]);
     			bc_printbigchar (big,14, 34, 7, 2);
 		}
-		else if (A[0] <= '9' && A[0]>='0')
+		else if (A[0] <= 'F' && A[0]>='0')
     		{
 			bc_setbig(big, A[3]);
     			bc_printbigchar (big,14, 10, 7, 2);
@@ -99,7 +100,6 @@ int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
 {
     struct termios term;
     if (tcgetattr(0, &term) == -1) return -1;
-    //regime == 1 ? term.c_lflag |= ICANON : term.c_lflag &= ~ICANON;
     if (tcgetattr(0, &term) == -1)
         return -1;
     if (regime == 1)
@@ -110,7 +110,6 @@ int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
     else
         return -1;
 
-    //sigint == 1 ? term.c_lflag |= ISIG : term.c_lflag &= ~ISIG;
     if (sigint == 1)
         term.c_lflag |= ISIG;
     else
@@ -118,7 +117,6 @@ int rk_mytermregime (int regime, int vtime, int vmin, int echo, int sigint)
         term.c_lflag &= ~ISIG;
     else
         return -1;
-    //echo == 1 ? term.c_lflag |= ECHO : term.c_lflag &= ~ECHO;
     if (echo == 1)
         term.c_lflag |= ECHO;
     else
@@ -168,7 +166,6 @@ int rk_readkey (enum keys *key)
     return 0;
 }
 
-/* reverse:  переворачиваем строку s на месте */
 void reverse(char s[])
 {
     int i, j;
@@ -185,12 +182,22 @@ void itoa(int n, char s[])
 {
     int i, sign;
 
-    if ((sign = n) < 0)  /* записываем знак */
-        n = -n;          /* делаем n положительным числом */
+    if ((sign = n) < 0)  
+        n = -n;          
     i = 0;
-    do {       /* генерируем цифры в обратном порядке */
-        s[i++] = n % 10 + '0';   /* берем следующую цифру */
-    } while ((n /= 10) > 0);     /* удаляем */
+    do {  
+	int x = n % 16;
+	if (x>9)    
+	{
+		if (x==10) s[i++]  = 'A';
+		if (x==11) s[i++]  = 'B';
+		if (x==12) s[i++]  = 'C';
+		if (x==13) s[i++]  = 'D';
+		if (x==14) s[i++]  = 'E';
+		if (x==15) s[i++]  = 'F';
+	}
+        else s[i++] = x + '0';   
+    } while ((n /= 16) > 0);     
     if (sign < 0)
         s[i++] = '-';
     s[i] = '\0';
@@ -350,7 +357,7 @@ void Signal(void)
     Instr = 0;
     mt_gotoXY(5, 65);
     mt_setbgcolor(9);
-    printf ("0x%d", Instr);
+    printf ("0x%x", Instr);
 }
 void Timer (void)
 {
@@ -379,7 +386,7 @@ int read_key(enum keys key)
         Instr = address;
         mt_gotoXY(5, 65);
         mt_setbgcolor(9);
-        printf ("0x%d ", Instr);
+        printf ("0x%x ", Instr);
 
         mt_gotoXY(11, 76);
         mt_setbgcolor(4);
@@ -410,7 +417,7 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%d ", Instr);
+                printf ("0x%x ", Instr);
 
                 break;
             case Left:
@@ -434,7 +441,7 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%d ", Instr);
+                printf ("0x%x ", Instr);
                 break;
             case Up:
 
@@ -457,7 +464,7 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%d ", Instr);
+                printf ("0x%x ", Instr);
 
                 break;
             case Down:
@@ -481,7 +488,7 @@ int read_key(enum keys key)
                 Instr = address;
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
-                printf ("0x%d ", Instr);
+                printf ("0x%x ", Instr);
 
                 break;
             case Esc:
@@ -499,6 +506,16 @@ int read_key(enum keys key)
             case F5:
 
                 scanf("%d", &value);
+
+		while (value>65535)
+		{
+			mt_gotoXY(23, 1);
+			printf ("Error       ");
+			mt_gotoXY(24, 1);
+ 			printf("            ");
+			mt_gotoXY(24, 1);
+			scanf("%d", &value);
+		}
                 sc_memorySet(address, value);
                 mt_gotoXY(x, y);
                 mt_setbgcolor(4);
@@ -508,7 +525,9 @@ int read_key(enum keys key)
                 mt_setbgcolor(9);
                 mt_gotoXY(23, 10);
                 printf("            ");
-				mt_gotoXY(23, 10);
+		mt_gotoXY(24, 1);
+                printf("            ");
+		mt_gotoXY(23, 10);
                 break;
             case Run:
                 Timer();
