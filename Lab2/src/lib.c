@@ -4,6 +4,7 @@
 #include "lib3.h"
 #include "lib4.h"
 #include "lib5.h"
+#include "cu.h"
 
 #define N 100
 int A[N];

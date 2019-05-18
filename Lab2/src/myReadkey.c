@@ -3,6 +3,7 @@
 #include "lib3.h"
 #include "lib4.h"
 #include "lib5.h"
+#include "cu.h"
 
 int address = 0;
 int x = 2, y = 2;
@@ -258,7 +259,7 @@ void printGUI (void)
     mt_gotoXY(10, 70);
     printf("Flags");
     mt_gotoXY(11, 68);
-    printf("O E V M T");
+    printf("O E P M T");
 
     bc_box(13, 44, 10, 20);
     mt_gotoXY(13, 50);
@@ -314,6 +315,10 @@ void signalhandler(int signo)
     char A[4];
     int big[2];
 
+    if (CU(A) == -1) {
+        alarm(0);
+        return -1;
+    }
     if (address == 99)
     {
         alarm (0);
@@ -628,10 +633,10 @@ int read_key(enum keys key)
                 {
                     sc_regSet(M, 1);
                     mt_gotoXY(11, 74);
-                        mt_setbgcolor(4);
-                        printf("M");
+                    mt_setbgcolor(4);
+                    printf("M");
                     address=x1;
-                        mt_gotoXY(25, 1);
+                    mt_gotoXY(25, 1);
                     break;
                 }
 
@@ -695,6 +700,8 @@ int read_key(enum keys key)
                 else printf (" ");
                 printf("%x   ", valacc);
                 break;
+            default:
+                return -1;
 
         }
 	if (key == Reset) {

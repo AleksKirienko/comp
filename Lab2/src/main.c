@@ -4,6 +4,7 @@
 #include "lib3.h"
 #include "lib4.h"
 #include "lib5.h"
+#include "cu.h"
 
 int main()
 {
@@ -53,7 +54,7 @@ int main()
     mt_gotoXY(10, 70);
     printf("Flags");
     mt_gotoXY(11, 68);
-    printf("O E V M T");
+    printf("O E P M T");
 
     bc_box(13, 44, 10, 20);
     mt_gotoXY(13, 50);
@@ -122,7 +123,8 @@ mt_gotoXY(21, 45);
 
     mt_setbgcolor(9);
     mt_setfgcolor(9);
-    while (key != Esc)
+    while (key != Esc) {
         rk_readkey(&key);
+    }
     return 0;
 }

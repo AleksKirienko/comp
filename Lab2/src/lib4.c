@@ -1,6 +1,7 @@
 #include "lib4.h"
 #include "lib3.h"
 #include "lib.h"
+#include "cu.h"
 
 int bc_printA(char *str) {
     printf(ENTER_MODE);

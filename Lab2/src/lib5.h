@@ -10,6 +10,7 @@
 #include <sys/time.h>
 
 extern int address;
+extern int Instr;
 extern int valacc;
 
 enum keys{Right, Left, Up, Down, Esc, Reset, Run, Save, Load, F5, F6, Step, Enter};

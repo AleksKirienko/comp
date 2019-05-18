@@ -1,7 +1,7 @@
 CXX=gcc
 CFLAGS = -c -Wall -std=c99
 FLAGS  =  -Wall -std=c99
-OBJECTS = build/main.o build/lib.o build/lib3.o build/lib4.o build/lib5.o
+OBJECTS = build/main.o build/lib.o build/lib3.o build/lib4.o build/lib5.o build/cu.o
 
 .PHONY: clean all bin build  bin/prog
 
@@ -10,7 +10,7 @@ all: bin build  bin/prog
 bin/prog: $(OBJECTS)
 	$(CXX) $(FLAGS) $(OBJECTS) -o bin/prog
 
-build/main.o: src/main.c src/lib.h src/lib3.h
+build/main.o: src/main.c src/lib.h src/lib3.h src/lib4.h src/lib5.h src/cu.h
 	$(CXX) $(CFLAGS) src/main.c -o build/main.o 
 
 build/lib.o: src/lib.c src/lib.h
@@ -24,6 +24,9 @@ build/lib4.o: src/lib4.c src/lib4.h
 
 build/lib5.o: src/myReadkey.c src/lib5.h
 	$(CXX) $(CFLAGS) src/myReadkey.c -o build/lib5.o
+
+build/cu.o: src/cu.c src/cu.h
+	$(CXX) $(CFLAGS) src/cu.c -o build/cu.o
 
 build:
 	mkdir  build
