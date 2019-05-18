@@ -252,7 +252,7 @@ void printGUI (void)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x;%x",command,operand);
+	printf("%x:%x",command,operand);
 
     bc_box(10, 64, 3, 20);
     mt_gotoXY(10, 70);
@@ -325,7 +325,7 @@ void signalhandler(int signo)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x;%x",command,operand);
+	printf("%x:%x",command,operand);
 	return;
     }
     if (address % 10 == 9)
@@ -353,7 +353,7 @@ void signalhandler(int signo)
 		mt_gotoXY(8, 71);
 		int command,operand;
 		sc_commandDecode(value, &command, &operand);
-		printf("%x;%x",command,operand);
+		printf("%x:%x",command,operand);
     }
     else
      {
@@ -378,7 +378,7 @@ void signalhandler(int signo)
 		mt_gotoXY(8, 71);
 		int command,operand;
 		sc_commandDecode(value, &command, &operand);
-		printf("%x;%x",command,operand);
+		printf("%x:%x",command,operand);
         //mt_gotoXY(23, 1);
     }
     itoa(value, A);
@@ -411,7 +411,7 @@ void Signal(void)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x;%x",command,operand);
+	printf("%x:%x",command,operand);
 }
 void Timer (void)
 {
@@ -498,7 +498,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x;%x",command,operand);
+				printf("%x:%x",command,operand);
 
                 break;
             case Left:
@@ -530,7 +530,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x;%x",command,operand);
+				printf("%x:%x",command,operand);
                 break;
             case Up:
 
@@ -561,7 +561,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x;%x",command,operand);
+				printf("%x:%x",command,operand);
                 break;
             case Down:
 
@@ -592,7 +592,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x;%x",command,operand);
+				printf("%x:%x",command,operand);
                 break;
             case Esc:
                 break;
@@ -635,7 +635,7 @@ int read_key(enum keys key)
                 mt_gotoXY(8, 71);
                 //int command,operand;
                 sc_commandDecode(value, &command, &operand);
-                printf("%x;%x",command,operand);
+                printf("%x:%x",command,operand);
                 break;
             case F6:
                 sc_memoryGet(address, &value);
@@ -684,7 +684,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x;%x",command,operand);
+				printf("%x:%x",command,operand);
 
                 break;
             case Run:

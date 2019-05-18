@@ -47,7 +47,7 @@ int main(int args, char* argv[])
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x;%x",command,operand);
+	printf("%x:%x",command,operand);
 
     bc_box(10, 64, 3, 20);
     mt_gotoXY(10, 70);
