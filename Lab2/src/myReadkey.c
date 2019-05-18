@@ -314,10 +314,14 @@ void signalhandler(int signo)
     int value;
     char A[4];
     int big[2];
-
+	sc_regSet(T, 1);
+    mt_gotoXY(11, 76);
+    mt_setbgcolor(4);
+    printf("T");
+    mt_gotoXY(25, 1);
     if (CU(A) == -1) {
         alarm(0);
-        return -1;
+        return ;
     }
     if (address == 99)
     {
@@ -333,59 +337,32 @@ void signalhandler(int signo)
 	printf("%x:%x",command,operand);
 	return;
     }
-    if (address % 10 == 9)
-    {
-        sc_memoryGet(address, &value);
-        mt_gotoXY(x, y);
-        mt_setbgcolor(9);
-        if (value<32768)  printf("+");
-		else printf(" ");
-        printf("%x", value);
-        y = 2;
-        x++;
-        address++;
-        sc_memoryGet(address, &value);
-        mt_setbgcolor(4);
-        mt_gotoXY(x, y);
-        if (value<32768)  printf("+");
-		else printf(" ");
-        printf("%x", value);
+	sc_memoryGet(address, &value);
+    mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+	printf("      ");
+	mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+    mt_setbgcolor(9);
+    if (value<32768)  printf("+");
+	else printf(" ");
+    printf("%x", value);
+    address++;
+    sc_memoryGet(address, &value);
+    mt_setbgcolor(4);
+    mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+	printf("      ");
+	mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+    if (value<32768)  printf("+");
+	else printf(" ");
+    printf("%x", value);
 
-		Instr = address;
-		mt_gotoXY(5, 65);
-        mt_setbgcolor(9);
-        printf ("+%x ", Instr);
-		mt_gotoXY(8, 71);
-		int command,operand;
-		sc_commandDecode(value, &command, &operand);
-		printf("%x:%x",command,operand);
-    }
-    else
-     {
-        sc_memoryGet(address, &value);
-        mt_gotoXY(x, y);
-        mt_setbgcolor(9);
-        if (value<32768)  printf("+");
-		else printf(" ");
-        printf("%x", value);
-        y += 6;
-        address++;
-        sc_memoryGet(address, &value);
-        mt_setbgcolor(4);
-        mt_gotoXY(x, y);
-        if (value<32768)  printf("+");
-		else printf(" ");
-        printf("%x", value);
-		Instr = address;
-        mt_gotoXY(5, 65);
-        mt_setbgcolor(9);
-        printf ("+%x ", Instr);
-		mt_gotoXY(8, 71);
-		int command,operand;
-		sc_commandDecode(value, &command, &operand);
-		printf("%x:%x",command,operand);
-        //mt_gotoXY(23, 1);
-    }
+	Instr = address;
+	mt_gotoXY(5, 65);
+    mt_setbgcolor(9);
+    printf ("+%x ", Instr);
+	mt_gotoXY(8, 71);
+	int command,operand;
+	sc_commandDecode(value, &command, &operand);
+	printf("%x:%x",command,operand);
     itoa(value, A);
 	print (value, A);
 	alarm(1);
@@ -444,7 +421,8 @@ int ReadAssemblerFile(int args, char *argv[])
 		fread(&operand, sizeof(int), 1, input);
 		if (command != 1)
 			sc_commandEncode(command, operand, &value);
-		else value = operand;
+		else 
+			value = operand;
 		sc_memorySet(address, value);
 	}
 	fclose(input);
@@ -457,6 +435,7 @@ int read_key(enum keys key)
 	int value;
 	char A[4];
 	int big[2];
+	int command, operand;
 	sc_regGet (T, &value);
 	if (value == 1 && key != Reset){
 	    signal (SIGALRM, signalhandler);
@@ -478,16 +457,19 @@ int read_key(enum keys key)
 
                 if (address % 10 == 9) break;
                 sc_memoryGet(address, &value);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
-                y += 6;
                 address++;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
@@ -501,7 +483,7 @@ int read_key(enum keys key)
                 mt_setbgcolor(9);
                 printf ("+%x ", Instr);
 				mt_gotoXY(8, 71);
-				int command,operand;
+				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
 				printf("%x:%x",command,operand);
 
@@ -510,16 +492,19 @@ int read_key(enum keys key)
 
                 if (address % 10 == 0) break;
                 sc_memoryGet(address, &value);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
-                y -= 6;
                 address--;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
@@ -541,16 +526,19 @@ int read_key(enum keys key)
 
                 if (address / 10 == 0) break;
                 sc_memoryGet(address, &value);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
 				else printf(" ");
         	    printf("%x", value);
-                x--;
                 address -= 10;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
@@ -572,16 +560,19 @@ int read_key(enum keys key)
 
                 if (address / 10 == 9) break;
                 sc_memoryGet(address, &value);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
-                x++;
                 address += 10;
                 sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);

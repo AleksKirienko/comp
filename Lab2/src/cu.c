@@ -7,6 +7,10 @@
 int CU (char A[])
 {
     int value, command, operand;
+	mt_setbgcolor(9);
+	mt_gotoXY(30, 1);
+    printf("          ", value);
+	mt_gotoXY(30, 1);
     sc_memoryGet(address, &value);
     if (sc_commandDecode( value, &command, &operand) == -1)
     {
@@ -17,20 +21,22 @@ int CU (char A[])
         mt_gotoXY(25, 1);
         return -1;
     }
-    if (command >= 0x30 && command <= 33)
+    if (command >= 0x30 && command <= 0x33)
         return ALU(command, operand);
     switch (command)
     {
         case 0x10:
             alarm(0);
             rk_mytermregime(1, 1, 1, 1, 1);
-            scanf("%d", value);
+            scanf("%d", &value);
             rk_mytermregime(0, 0, 1, 0, 1);
             if (sc_memorySet(operand, value) == -1){
                 sc_regSet(M, 1);
                 return -1;
             }
-            mt_gotoXY((operand % 10) * 6 + 2, operand / 10 + 2);
+            mt_gotoXY(operand/10 + 2, (operand % 10)*6+2 );
+			printf("      ");
+			mt_gotoXY(operand/10 + 2, (operand % 10)*6+2 );
             mt_setbgcolor(9);
             if (value<32768)  printf("+");
             else printf(" ");
@@ -42,6 +48,7 @@ int CU (char A[])
                 sc_regSet(M, 1);
                 return -1;
             }
+			mt_gotoXY(30, 1);
             printf("%d", value);
             break;
         case 0x20:
@@ -71,32 +78,14 @@ int CU (char A[])
                 sc_regSet(M, 1);
                 return -1;
             }
-            mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-            address = operand;
+            mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+			printf("      ");
+			mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+            address = operand - 1;
             mt_setbgcolor(9);
             if (value<32768)  printf("+");
             else printf(" ");
             printf("%x", value);
-
-            sc_memoryGet(address, &value);
-            mt_setbgcolor(4);
-            mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-            if (value<32768)  printf("+");
-            else printf(" ");
-            printf("%x", value);
-            mt_gotoXY(30, 1);
-
-            itoa(value, A);
-            print (value, A);
-
-            Instr = address;
-            mt_gotoXY(5, 65);
-            mt_setbgcolor(9);
-            printf ("+%x ", Instr);
-            mt_gotoXY(8, 71);
-            int command,operand;
-            sc_commandDecode(value, &command, &operand);
-            printf("%x:%x",command,operand);
             break;
         case 0x41:
             if (sc_memoryGet(operand, &value) == -1){
@@ -104,32 +93,15 @@ int CU (char A[])
                 return -1;
             }
             if(valacc < 0) {
-                mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-                address = operand;
+				sc_memoryGet(address, &value);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value < 32768) printf("+");
                 else printf(" ");
                 printf("%x", value);
-
-                sc_memoryGet(address, &value);
-                mt_setbgcolor(4);
-                mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-                if (value < 32768) printf("+");
-                else printf(" ");
-                printf("%x", value);
-                mt_gotoXY(30, 1);
-
-                itoa(value, A);
-                print(value, A);
-
-                Instr = address;
-                mt_gotoXY(5, 65);
-                mt_setbgcolor(9);
-                printf("+%x ", Instr);
-                mt_gotoXY(8, 71);
-                int command, operand;
-                sc_commandDecode(value, &command, &operand);
-                printf("%x:%x", command, operand);
+				address = operand - 1;
             }
             break;
         case 0x42:
@@ -138,36 +110,18 @@ int CU (char A[])
                 return -1;
             }
             if(valacc == 0) {
-                mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-                address = operand;
-                mt_setbgcolor(9);
-                if (value < 32768) printf("+");
-                else printf(" ");
-                printf("%x", value);
-
                 sc_memoryGet(address, &value);
-                mt_setbgcolor(4);
-                mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+                mt_setbgcolor(9);
                 if (value < 32768) printf("+");
                 else printf(" ");
                 printf("%x", value);
-                mt_gotoXY(30, 1);
-
-                itoa(value, A);
-                print(value, A);
-
-                Instr = address;
-                mt_gotoXY(5, 65);
-                mt_setbgcolor(9);
-                printf("+%x ", Instr);
-                mt_gotoXY(8, 71);
-                int command, operand;
-                sc_commandDecode(value, &command, &operand);
-                printf("%x:%x", command, operand);
+				address = operand - 1;
             }
             break;
         case 0x43:
-            alarm(0);
             return -1;
         case 0x59:
             if (sc_memoryGet(operand, &value) == -1){
@@ -175,32 +129,14 @@ int CU (char A[])
                 return -1;
             }
             if (valacc % 2 != 0){
-                mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-                address = operand;
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value < 32768) printf("+");
                 else printf(" ");
                 printf("%x", value);
-
-                sc_memoryGet(address, &value);
-                mt_setbgcolor(4);
-                mt_gotoXY((address % 10) * 6 + 2, address / 10 + 2);
-                if (value < 32768) printf("+");
-                else printf(" ");
-                printf("%x", value);
-                mt_gotoXY(30, 1);
-
-                itoa(value, A);
-                print(value, A);
-
-                Instr = address;
-                mt_gotoXY(5, 65);
-                mt_setbgcolor(9);
-                printf("+%x ", Instr);
-                mt_gotoXY(8, 71);
-                int command, operand;
-                sc_commandDecode(value, &command, &operand);
-                printf("%x:%x", command, operand);
+				address = operand - 1;
             }
             break;
         case 0x66:
@@ -230,7 +166,7 @@ int CU (char A[])
 int ALU(int command, int operand)
 {
     int value;
-    if (sc_memoryGet(address, &value) == -1)
+    if (sc_memoryGet(operand, &value) == -1)
     {
         sc_regSet(M, 1);
         mt_gotoXY(11, 74);
@@ -239,43 +175,59 @@ int ALU(int command, int operand)
         mt_gotoXY(25, 1);
         return -1;
     }
-    if (sc_memoryGet(operand, &value) == -1){
-        sc_regSet(M, 1);
-        return -1;
-    }
     switch (command)
     {
         case 0x30:
             valacc+=value;
-            if(valacc > 32766 && valacc < -32766){
-                sc_regSet(P, 1);
+            if(valacc > 32766 || valacc < -32766){
+				sc_regSet(P, 1);
+       			mt_gotoXY(11, 72);
+       			mt_setbgcolor(4);
+        		printf("P");
+        		mt_gotoXY(25, 1);
                 return -1;
             }
             break;
         case 0x31:
-            valacc-=value;
-            if(valacc > 32766 && valacc < -32766){
+            valacc -= value;
+            if(valacc > 32766 || valacc < -32766){
+				sc_regSet(P, 1);
+       			mt_gotoXY(11, 72);
+       			mt_setbgcolor(4);
+        		printf("P");
+        		mt_gotoXY(25, 1);
                 sc_regSet(P, 1);
                 return -1;
             }
             break;
         case 0x32:
             if(value == 0) {
-                mt_gotoXY(11, 72);
+				sc_regSet(O, 1);
+                mt_gotoXY(11, 68);
                 mt_setbgcolor(4);
-                printf("P");
+                printf("O");
                 mt_gotoXY(25, 1);
                 return -1;
             }
             valacc/=value;
-            if(valacc > 32766 && valacc < -32766){
+            if(valacc > 32766 || valacc < -32766){
+				sc_regSet(P, 1);
+       			mt_gotoXY(11, 72);
+       			mt_setbgcolor(4);
+        		printf("P");
+        		mt_gotoXY(25, 1);
                 sc_regSet(P, 1);
                 return -1;
             }
             break;
         case 0x33:
             valacc*=value;
-            if(valacc > 32766 && valacc < -32766){
+            if(valacc > 32766 || valacc < -32766){
+				sc_regSet(P, 1);
+       			mt_gotoXY(11, 72);
+       			mt_setbgcolor(4);
+        		printf("P");
+        		mt_gotoXY(25, 1);
                 sc_regSet(P, 1);
                 return -1;
             }
@@ -283,9 +235,12 @@ int ALU(int command, int operand)
         default:
             return -1;
     }
-    /*mt_gotoXY(2, 67);
-    if (valacc < 32768) printf ("+");
-    else printf (" ");
-    printf("%x   ", valacc);*/
+    mt_gotoXY(2, 67);
+    if (valacc < 32768) 
+		if (valacc >= 0)
+			printf ("+%x    ", valacc);
+		else
+			printf("-%x    ",valacc * -1);
+    else printf (" %x     ",valacc);
     return 0;
 }

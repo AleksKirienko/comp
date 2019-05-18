@@ -34,11 +34,6 @@ int sc_regSet (int registor, int value)
 		}
 		return -1;
 	}
-	else
-	{
-		sc_regSet(E, 1);
-		return -1;
-	}
 }
 
 int sc_memoryInit() {
@@ -51,7 +46,7 @@ int sc_memoryInit() {
 
 int sc_memorySet(int address, int value) {
   int r=0;
-  if (address < 0 || address > 99) {sc_regSet (r,M); return -1;}
+  if (address < 0 || address > 99 || value < 0 || value > 32767) {sc_regSet (r,M); return -1;}
     else {
         A[address] = value;
         return 1;
@@ -85,11 +80,10 @@ int sc_regInit(void) {
 int sc_regGet (int registor,int *value)
 {
 	int r=0;
-    if (registor >= 0 && registor <= 10) {
+    if (registor >= 0 && registor <= 10)
         *value = (registr >> (registor-1)) & 0x1;
 	return 1;
-    }
-    else {sc_regSet (r,E); return -1;}
+  
 }
 int sc_commandEncode(int command, int operand, int *value)
 {
@@ -112,7 +106,7 @@ int sc_commandDecode(int value, int *command, int *operand)
 {
 	int r = 0;
   	*command = (value >> 7);
-	*operand = value&(~(value << 7));
+	*operand = value & 0x7F;
 	if (*command == 0x10 || *command == 0x11 || *command == 0x20 || *command == 0x21 || (*command > 0x29 && *command < 0x34) || (*command > 0x39 && *command < 0x44) || (*command > 0x50 && *command < 0x77))
 	{
   		return 1;

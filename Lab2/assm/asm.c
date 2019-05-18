@@ -25,34 +25,36 @@ int main(int args, char* argv[])
 	FILE* input = fopen (argv[1],"r");
 	FILE* output = fopen (argv[2],"wb");
 	char s[200];
-	int address, command, operand=0;
-	if (input == -1) return -1;
-	while (!feof(input))
+	char str[7];
+	int address, command, operand = 0, i;
+	if (input == NULL) 
+		return -1;
+	while (fgets(s, 200, input))
 	{
-		fscanf (input, "%s", s);
 		address = (s[0]-'0') * 10 +(s[1]-'0');
-		int i = 3;
-		char str[7];
-		while (s[i]!= ' ')
+		i = 3;
+		while (s[i] != ' ')
 		{
-			str[i-3] = s[i];
-			i++;
+			str[i - 3] = s[i];
+			++i;
 		}
+		str[i - 3] = '\0'; 
+		//printf("%s\n",s);
 		command = checkcommand (str);
 		if (command == -1) 
 		{ 
 			printf ("Incorrect command\n"); 
 			return -1;
 		}
-		for (;s[i] == ' '; i++);
-		while (s[i]!=' ' || s[i]!='\0')
-		{
-			operand = operand * 10 +(s[i]-'0');
-			i++;
-		}
+		for (; s[i] == ' '; ++i)
+			;
+		for (; s[i] != ' ' && s[i] != '\0'; ++i)
+			if (s[i] != '+')
+				operand = operand * 10 + s[i] - '0';
 		fwrite(&address, sizeof(int), 1, output);
 		fwrite(&command, sizeof(int), 1, output);
 		fwrite(&operand, sizeof(int), 1, output);
+		operand = 0;
 	}
 	fclose(input);
 	fclose(output);

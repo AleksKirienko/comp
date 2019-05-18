@@ -11,10 +11,9 @@ int main(int args, char* argv[])
     int fd = open("src/Bigchars", O_WRONLY);
     mt_clrscr();
     sc_memoryInit ();
-
+	if (args > 1 && ReadAssemblerFile(args, argv) == -1) return -1;
     bc_box(1, 1, 12, 63);
     mt_gotoXY(2, 0);
-    sc_memorySet(5, 9);
     printMas();
 
     int value;
@@ -124,7 +123,6 @@ mt_gotoXY(21, 45);
     mt_setbgcolor(9);
     mt_setfgcolor(9);
 
-	if (args > 1 && ReadAssemblerFile(args, argv) == -1) return -1;
     while (key != Esc)
         rk_readkey(&key);
 
