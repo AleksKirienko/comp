@@ -1,18 +1,22 @@
 CXX=gcc
 CFLAGS = -c -Wall -std=c99
 FLAGS  =  -Wall -std=c99
-OBJECTS = asm.o
+OBJECTS = build/asm.o
 
-.PHONY: clean all 
+.PHONY: clean all bin build  bin/prog
 
-all: asm.o prog
+all: bin build  bin/prog
 
-prog: $(OBJECTS)
-	$(CXX) $(FLAGS) $(OBJECTS) -o prog
+bin/prog: $(OBJECTS)
+	$(CXX) $(FLAGS) $(OBJECTS) -o bin/prog
 
-asm.o: asm.c
-	$(CXX) $(CFLAGS) asm.c -o asm.o
+build/asm.o: src/asm.c
+	$(CXX) $(CFLAGS) src/asm.c -o build/asm.o
 
+build:
+	mkdir  build
+bin:
+	mkdir  bin
 
 clean:
-	-rm asm.o
+	-rm -rf build bin
