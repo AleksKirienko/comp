@@ -274,13 +274,13 @@ void printGUI (void)
     printf("r - Run");
     mt_gotoXY(18, 45);
     printf("q - escape ");
+    //mt_gotoXY(19, 45);
+   // printf("e - enter chars");
     mt_gotoXY(19, 45);
-    printf("e - enter chars");
-    mt_gotoXY(20, 45);
     printf("F5 - accumulator");
-	mt_gotoXY(21, 45);
+	mt_gotoXY(20, 45);
     printf("F6 - enter address");
-	mt_gotoXY(22, 45);
+	mt_gotoXY(21, 45);
     printf("T - Step");
 
     bc_box(13, 1, 10, 42);
@@ -425,6 +425,25 @@ void Timer (void)
 	nval.it_value.tv_usec = 0;
 
     setitimer (ITIMER_REAL, &nval, &oval);
+}
+
+int ReadAssemblerFile(int args, char *argv[])
+{
+	FILE* input = fopen (argv[1],"r");
+	int address, command, operand, value;
+	if (input == -1) return -1;
+	while (!feof(input))
+	{
+		fread(&address, sizeof(int), 1, input);
+		fread(&command, sizeof(int), 1, input);
+		fread(&operand, sizeof(int), 1, input);
+		if (command != 1)
+			sc_commandEncode(command, operand, &value);
+		else value = operand;
+		sc_memorySet(address, value);
+	}
+	fclose(input);
+	return 0;
 }
 
 int read_key(enum keys key)
