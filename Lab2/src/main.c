@@ -5,7 +5,7 @@
 #include "lib4.h"
 #include "lib5.h"
 
-int main()
+int main(int args, char* argv[])
 {
     int fd = open("src/Bigchars", O_WRONLY);
     mt_clrscr();
@@ -122,7 +122,9 @@ mt_gotoXY(21, 45);
 
     mt_setbgcolor(9);
     mt_setfgcolor(9);
+	if (args > 1 && ReadAssemblerFile(args, argv) == -1) return -1;
     while (key != Esc)
         rk_readkey(&key);
+
     return 0;
 }
