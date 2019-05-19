@@ -370,8 +370,9 @@ void signalhandler(int signo)
 void Signal(void)
 {
     int value;
+    valacc = 0;
     sc_regSet(T, 0);
-   	mt_gotoXY(11, 74);
+   	mt_gotoXY(11, 76);
     mt_setbgcolor(9);
     printf("T");
    	mt_gotoXY(25, 1);
@@ -411,7 +412,7 @@ void Signal(void)
 void Timer (void)
 {
     sc_regSet(T, 1);
-   	mt_gotoXY(11, 74);
+   	mt_gotoXY(11, 76);
     mt_setbgcolor(4);
     printf("T");
    	mt_gotoXY(25, 1);
