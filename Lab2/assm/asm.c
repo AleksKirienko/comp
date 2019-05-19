@@ -48,12 +48,13 @@ int main(int args, char* argv[])
 		}
 		for (; s[i] == ' '; ++i)
 			;
-		for (; s[i] != ' ' && s[i] != '\0'; ++i)
+		for (; s[i] >= '0' && s[i] <= '9' || s[i] == '+'; ++i)
 			if (s[i] != '+')
 				operand = operand * 10 + s[i] - '0';
 		fwrite(&address, sizeof(int), 1, output);
 		fwrite(&command, sizeof(int), 1, output);
 		fwrite(&operand, sizeof(int), 1, output);
+		//printf("\n%d", operand);
 		operand = 0;
 	}
 	fclose(input);

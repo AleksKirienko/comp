@@ -68,7 +68,9 @@ int CU (char A[])
                 sc_regSet(M, 1);
                 return -1;
             }
-            mt_gotoXY((operand % 10) * 6 + 2, operand / 10 + 2);
+            mt_gotoXY(operand/10 + 2, (operand % 10)*6+2 );
+            printf("      ");
+            mt_gotoXY(operand/10 + 2, (operand % 10)*6+2 );
             mt_setbgcolor(9);
             if (valacc<32768)  printf("+");
             else printf(" ");
