@@ -314,11 +314,6 @@ void signalhandler(int signo)
     int value;
     char A[4];
     int big[2];
-	sc_regSet(T, 1);
-    mt_gotoXY(11, 76);
-    mt_setbgcolor(4);
-    printf("T");
-    mt_gotoXY(25, 1);
     if (CU(A) == -1) {
         alarm(0);
         return ;
@@ -619,7 +614,6 @@ int read_key(enum keys key)
                 break;
             case Enter:
                 scanf("%d", &value);
-
                 while (value>65535)
                 {
                     mt_gotoXY(23, 1);
@@ -702,7 +696,6 @@ int read_key(enum keys key)
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
 				printf("+%x : %x  ",command,operand);
-
                 break;
             case Run:
                 Timer();
@@ -711,9 +704,8 @@ int read_key(enum keys key)
                 Signal();
 		break;
 	    case Step:
-
-		signalhandler(SIGALRM);
-		alarm (0);
+		    signalhandler(SIGALRM);
+		    alarm (0);
                 break;
             case F5:
                 scanf("%d", &valacc);
