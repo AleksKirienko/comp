@@ -13,6 +13,8 @@ void printMas() {
     for (int i = 0; i < N; i++)
     {
         mt_gotoXY(i/10 + 2, (i % 10)*6+2 );
+	printf("      ");
+	mt_gotoXY(i/10 + 2, (i % 10)*6+2 );
         if (A[i]<32768)  printf("+");
         printf("%x", A[i]);
     }
@@ -46,7 +48,15 @@ int sc_memoryInit() {
 
 int sc_memorySet(int address, int value) {
   int r=0;
-  if (address < 0 || address > 99 || value < 0 || value > 32767) {sc_regSet (r,M); return -1;}
+  if (address < 0 || address > 99 || value < 0 || value > 32767) 
+	{
+		sc_regSet(M, 1);
+   		mt_gotoXY(11, 74);
+    	mt_setbgcolor(4);
+    	printf("M");
+   		mt_gotoXY(25, 1);
+		return -1;
+	}
     else {
         A[address] = value;
         return 1;
@@ -55,7 +65,14 @@ int sc_memorySet(int address, int value) {
 
 int sc_memoryGet(int address, int* value) {
   int r=0;
-  if (address < 0 || address > 99) {sc_regSet (r,M); return -1;}
+  if (address < 0 || address > 99) {
+		sc_regSet(M, 1);
+   		mt_gotoXY(11, 74);
+    	mt_setbgcolor(4);
+    	printf("M");
+   		mt_gotoXY(25, 1);
+		return -1;
+	}
     else {
         *value = A[address];
         return 1;
@@ -100,7 +117,12 @@ int sc_commandEncode(int command, int operand, int *value)
             return 1;
         }
     }
-    sc_regSet (r,E); return -1;
+		sc_regSet(E, 1);
+   		mt_gotoXY(11, 70);
+    	mt_setbgcolor(4);
+    	printf("E");
+   		mt_gotoXY(25, 1);
+		return -1;
 }
 int sc_commandDecode(int value, int *command, int *operand)
 {
@@ -113,7 +135,11 @@ int sc_commandDecode(int value, int *command, int *operand)
     }
 	else 
 	{
-		sc_regSet (r,E); 
+		sc_regSet(E, 1);
+   		mt_gotoXY(11, 70);
+    	mt_setbgcolor(4);
+    	printf("E");
+   		mt_gotoXY(25, 1);
 		return -1;
 	}
    // printf ("%d\n",*operand);

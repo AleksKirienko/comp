@@ -229,8 +229,11 @@ void printGUI (void)
 
     int value;
     sc_memoryGet(0, &value);
+	mt_setbgcolor (4);
     mt_gotoXY(2, 2);
-    mt_setbgcolor (4);
+	printf("      ");
+	mt_gotoXY(2, 2);
+
 	if (value<32768)  printf("+");
 	else printf(" ");
     printf("%x",value);
@@ -253,7 +256,7 @@ void printGUI (void)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x:%x",command,operand);
+	printf("+%x : %x  ",command,operand);
 
     bc_box(10, 64, 3, 20);
     mt_gotoXY(10, 70);
@@ -286,8 +289,6 @@ void printGUI (void)
 
     bc_box(13, 1, 10, 42);
     bc_setbig(big, '+');
-    bc_setbigcharpos (big, 4, 1, 0);
-    bc_setbigcharpos (big, 1, 1, 1);
 
     bc_printbigchar (big,14, 2, 7, 2);
     bc_setbig(big, '0');
@@ -334,7 +335,7 @@ void signalhandler(int signo)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x:%x",command,operand);
+	printf("+%x : %x  ",command,operand);
 	return;
     }
 	sc_memoryGet(address, &value);
@@ -362,7 +363,7 @@ void signalhandler(int signo)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x:%x",command,operand);
+	printf("+%x : %x  ",command,operand);
     itoa(value, A);
 	print (value, A);
 	alarm(1);
@@ -372,15 +373,21 @@ void Signal(void)
 {
     int value;
     sc_regSet(T, 0);
+   	mt_gotoXY(11, 74);
+    mt_setbgcolor(9);
+    printf("T");
+   	mt_gotoXY(25, 1);
 
     sc_memoryGet(address, &value);
-    mt_gotoXY(x, y);
+    mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+	printf("      ");
+	mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
     mt_setbgcolor(9);
     if (value<32768)  printf("+");
 	else printf(" ");
     printf("%x", value);
-    x = 2;
-    y = 2;
+    //x = 2;
+    //y = 2;
     address = 0;
 
     signal (SIGUSR1, sighandler);
@@ -393,11 +400,15 @@ void Signal(void)
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x:%x",command,operand);
+	printf("+%x : %x  ",command,operand);
 }
 void Timer (void)
 {
     sc_regSet(T, 1);
+   	mt_gotoXY(11, 74);
+    mt_setbgcolor(4);
+    printf("T");
+   	mt_gotoXY(25, 1);
     struct itimerval nval, oval;
     signal (SIGALRM, signalhandler);
 
@@ -485,7 +496,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x:%x",command,operand);
+				printf("+%x : %x  ",command,operand);
 
                 break;
             case Left:
@@ -520,7 +531,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x:%x",command,operand);
+				printf("+%x : %x  ",command,operand);
                 break;
             case Up:
 
@@ -554,7 +565,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x:%x",command,operand);
+				printf("+%x : %x  ",command,operand);
                 break;
             case Down:
 
@@ -588,7 +599,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x:%x",command,operand);
+				printf("+%x : %x  ",command,operand);
                 break;
             case Esc:
                 break;
@@ -615,7 +626,9 @@ int read_key(enum keys key)
                     scanf("%d", &value);
                 }
                 sc_memorySet(address, value);
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(4);
                 if (value<32768)  printf("+");
                 else printf(" ");
@@ -631,7 +644,7 @@ int read_key(enum keys key)
                 mt_gotoXY(8, 71);
                 //int command,operand;
                 sc_commandDecode(value, &command, &operand);
-                printf("%x:%x",command,operand);
+                printf("+%x : %x  ",command,operand);
                 break;
             case F6:
                 sc_memoryGet(address, &value);
@@ -650,7 +663,9 @@ int read_key(enum keys key)
                     break;
                 }
 
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
 				else printf(" ");
@@ -659,7 +674,9 @@ int read_key(enum keys key)
                 mt_setbgcolor(4);
 				x=2+address/10;
 				y = 2+address%10*6;
-                mt_gotoXY(x, y);
+                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				printf("      ");
+				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
@@ -680,7 +697,7 @@ int read_key(enum keys key)
 				mt_gotoXY(8, 71);
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
-				printf("%x:%x",command,operand);
+				printf("+%x : %x  ",command,operand);
 
                 break;
             case Run:
