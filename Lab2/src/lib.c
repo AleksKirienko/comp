@@ -47,7 +47,6 @@ int sc_memoryInit() {
 }
 
 int sc_memorySet(int address, int value) {
-  int r=0;
   if (address < 0 || address > 99 || value < 0 || value > 32767) 
 	{
 		sc_regSet(M, 1);
@@ -55,6 +54,7 @@ int sc_memorySet(int address, int value) {
     	mt_setbgcolor(4);
     	printf("M");
    		mt_gotoXY(25, 1);
+		mt_setbgcolor (9);
 		return -1;
 	}
     else {
@@ -64,13 +64,13 @@ int sc_memorySet(int address, int value) {
 }
 
 int sc_memoryGet(int address, int* value) {
-  int r=0;
   if (address < 0 || address > 99) {
 		sc_regSet(M, 1);
    		mt_gotoXY(11, 74);
     	mt_setbgcolor(4);
     	printf("M");
    		mt_gotoXY(25, 1);
+		mt_setbgcolor (9);
 		return -1;
 	}
     else {
@@ -96,7 +96,6 @@ int sc_regInit(void) {
 
 int sc_regGet (int registor,int *value)
 {
-	int r=0;
     if (registor >= 0 && registor <= 10)
         *value = (registr >> (registor-1)) & 0x1;
 	return 1;
@@ -104,29 +103,17 @@ int sc_regGet (int registor,int *value)
 }
 int sc_commandEncode(int command, int operand, int *value)
 {
-  	int r=0;
 	*value = command << 7;
 	*value|= operand;
     if (command == 0x10 || command == 0x11 || command == 0x20 || command == 0x21 || (command > 0x29 && command < 0x34) || (command > 0x39 && command < 0x44) || (command > 0x50 && command < 77))
 	{
-        if (operand < 128)
-	 	{
-           // printf ("%d",*value);
-		
-           // printf ("\n");
-            return 1;
-        }
+        if (operand < 128) return 1;
+
     }
-		sc_regSet(E, 1);
-   		mt_gotoXY(11, 70);
-    	mt_setbgcolor(4);
-    	printf("E");
-   		mt_gotoXY(25, 1);
 		return -1;
 }
 int sc_commandDecode(int value, int *command, int *operand)
 {
-	int r = 0;
   	*command = (value >> 7);
 	*operand = value & 0x7F;
 	if (*command == 0x10 || *command == 0x11 || *command == 0x20 || *command == 0x21 || (*command > 0x29 && *command < 0x34) || (*command > 0x39 && *command < 0x44) || (*command > 0x50 && *command < 0x77))
@@ -135,11 +122,7 @@ int sc_commandDecode(int value, int *command, int *operand)
     }
 	else 
 	{
-		sc_regSet(E, 1);
-   		mt_gotoXY(11, 70);
-    	mt_setbgcolor(4);
-    	printf("E");
-   		mt_gotoXY(25, 1);
+		
 		return -1;
 	}
    // printf ("%d\n",*operand);

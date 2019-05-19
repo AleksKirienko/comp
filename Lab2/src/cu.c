@@ -9,7 +9,7 @@ int CU (char A[])
     int value, command, operand;
 	mt_setbgcolor(9);
 	mt_gotoXY(30, 1);
-    printf("          ", value);
+    printf("          ");
 	mt_gotoXY(30, 1);
     sc_memoryGet(address, &value);
     if (sc_commandDecode( value, &command, &operand) == -1)
