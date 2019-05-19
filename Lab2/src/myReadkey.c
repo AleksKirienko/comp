@@ -12,24 +12,23 @@ int valacc = 0;
 
 void print (int value, char* A)
 {
-
 	if (value == 0)
 	{
 		bc_setbig(big, '+');
 		bc_printbigchar (big,14, 2, 7, 2);
 		bc_setbig(big, '0');
-    		bc_printbigchar (big,14, 10, 7, 2);
-    		bc_setbig(big, '0');
-    		bc_printbigchar (big,14, 18, 7, 2);
-    		bc_setbig(big, '0');
-    		bc_printbigchar (big,14, 26, 7, 2);
-    		bc_setbig(big, '0');
-    		bc_printbigchar (big,14, 34, 7, 2);
+		bc_printbigchar (big,14, 10, 7, 2);
+    	bc_setbig(big, '0');
+    	bc_printbigchar (big,14, 18, 7, 2);
+    	bc_setbig(big, '0');
+    	bc_printbigchar (big,14, 26, 7, 2);
+    	bc_setbig(big, '0');
+    	bc_printbigchar (big,14, 34, 7, 2);
 	}
 	else 
 	{
 		if (value < 32768)
-    		{
+		{
 			bc_setbig(big, '+');
 			bc_printbigchar (big,14, 2, 7, 2);
 		}
@@ -39,19 +38,19 @@ void print (int value, char* A)
 			bc_printbigchar (big,14, 2, 7, 2);
  		}
 		if (A[3] <= 'F' && A[3]>='0')
-    		{
-			bc_setbig(big, A[0]);
-    			bc_printbigchar (big,14, 10, 7, 2);
-    			bc_setbig(big, A[1]);
-    			bc_printbigchar (big,14, 18, 7, 2);
-    			bc_setbig(big, A[2]);
-    			bc_printbigchar (big,14, 26, 7, 2);
-    			bc_setbig(big, A[3]);
-    			bc_printbigchar (big,14, 34, 7, 2);
+		{
+		    bc_setbig(big, A[0]);
+		    bc_printbigchar (big,14, 10, 7, 2);
+		    bc_setbig(big, A[1]);
+		    bc_printbigchar (big,14, 18, 7, 2);
+		    bc_setbig(big, A[2]);
+		    bc_printbigchar (big,14, 26, 7, 2);
+		    bc_setbig(big, A[3]);
+		    bc_printbigchar (big,14, 34, 7, 2);
 		}
 		else if (A[2] <= 'F' && A[2]>='0')
     		{
-			bc_setbig(big, A[3]);
+			    bc_setbig(big, A[3]);
     			bc_printbigchar (big,14, 10, 7, 2);
     			bc_setbig(big, A[0]);
     			bc_printbigchar (big,14, 18, 7, 2);
@@ -62,7 +61,7 @@ void print (int value, char* A)
 		}
 		else if (A[1] <= 'F' && A[1]>='0')
     		{
-			bc_setbig(big, A[2]);
+			    bc_setbig(big, A[2]);
     			bc_printbigchar (big,14, 10, 7, 2);
     			bc_setbig(big, A[3]);
     			bc_printbigchar (big,14, 18, 7, 2);
@@ -73,7 +72,7 @@ void print (int value, char* A)
 		}
 		else if (A[0] <= 'F' && A[0]>='0')
     		{
-			bc_setbig(big, A[3]);
+			    bc_setbig(big, A[3]);
     			bc_printbigchar (big,14, 10, 7, 2);
     			bc_setbig(big, A[2]);
     			bc_printbigchar (big,14, 18, 7, 2);
@@ -386,6 +385,11 @@ void Signal(void)
     signal (SIGUSR1, sighandler);
     raise (SIGUSR1);
 
+    mt_gotoXY(2, 67);
+    if (valacc < 32768) printf ("+");
+    else printf (" ");
+    printf("%x   ", valacc);
+
     Instr = 0;
     mt_gotoXY(5, 65);
     mt_setbgcolor(9);
@@ -394,6 +398,7 @@ void Signal(void)
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
 	printf("%x:%x",command,operand);
+
 }
 void Timer (void)
 {

@@ -33,6 +33,11 @@ int main(int args, char* argv[])
     mt_gotoXY(1, 67);
     printf("Accumulator");
 
+    mt_gotoXY(2, 67);
+    if (valacc < 32768) printf ("+");
+    else printf (" ");
+    printf("%x   ", valacc);
+
     bc_box(4, 64, 3, 20);
     mt_gotoXY(4, 65);
     printf("InstructionCounter");
@@ -71,9 +76,9 @@ int main(int args, char* argv[])
     printf("q - escape ");
     mt_gotoXY(19, 45);
     printf("F5 - enter chars");
-mt_gotoXY(20, 45);
+    mt_gotoXY(20, 45);
     printf("F6 - enter address");
-mt_gotoXY(21, 45);
+    mt_gotoXY(21, 45);
     printf("T - Step");
 
     bc_box(13, 1, 10, 42);
