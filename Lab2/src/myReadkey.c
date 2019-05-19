@@ -243,6 +243,7 @@ void printGUI (void)
 
     bc_box(1, 64, 3, 20);
     mt_gotoXY(1, 67);
+	mt_setbgcolor(9);
     printf("Accumulator");
 
     bc_box(4, 64, 3, 20);
@@ -252,9 +253,10 @@ void printGUI (void)
     bc_box(7, 64, 3, 20);
     mt_gotoXY(7, 70);
     printf("Operation");
-	mt_gotoXY(8, 71);
+
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
+	mt_gotoXY(8, 71);
 	printf("+%x : %x  ",command,operand);
 
     bc_box(10, 64, 3, 20);
@@ -326,9 +328,10 @@ void signalhandler(int signo)
     mt_gotoXY(5, 65);
     mt_setbgcolor(9);
     printf ("+%x ", Instr);
-	mt_gotoXY(8, 71);
+
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
+	mt_gotoXY(8, 71);
 	printf("+%x : %x  ",command,operand);
 	return;
     }
@@ -354,9 +357,10 @@ void signalhandler(int signo)
 	mt_gotoXY(5, 65);
     mt_setbgcolor(9);
     printf ("+%x ", Instr);
-	mt_gotoXY(8, 71);
+
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
+	mt_gotoXY(8, 71);
 	printf("+%x : %x  ",command,operand);
     itoa(value, A);
 	print (value, A);
@@ -388,6 +392,7 @@ void Signal(void)
     raise (SIGUSR1);
 
     mt_gotoXY(2, 67);
+	mt_setbgcolor(9);
     if (valacc < 32768) printf ("+");
     else printf (" ");
     printf("%x   ", valacc);
@@ -396,10 +401,12 @@ void Signal(void)
     mt_gotoXY(5, 65);
     mt_setbgcolor(9);
     printf ("+%x", Instr);
-	mt_gotoXY(8, 71);
+
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
+	mt_gotoXY(8, 71);
 	printf("+%x : %x  ",command,operand);
+	mt_setbgcolor(9);
 }
 void Timer (void)
 {
@@ -444,7 +451,6 @@ int read_key(enum keys key)
     FILE *f;
 	int value;
 	char A[4];
-	int big[2];
 	int command, operand;
 	sc_regGet (T, &value);
 	if (value == 1 && key != Reset){
@@ -492,9 +498,10 @@ int read_key(enum keys key)
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
                 printf ("+%x ", Instr);
-				mt_gotoXY(8, 71);
+
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
+				mt_gotoXY(8, 71);
 				printf("+%x : %x  ",command,operand);
 
                 break;
@@ -527,9 +534,10 @@ int read_key(enum keys key)
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
                 printf ("+%x ", Instr);
-				mt_gotoXY(8, 71);
+
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
+				mt_gotoXY(8, 71);
 				printf("+%x : %x  ",command,operand);
                 break;
             case Up:
@@ -561,9 +569,10 @@ int read_key(enum keys key)
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
                 printf ("+%x ", Instr);
-				mt_gotoXY(8, 71);
+
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
+				mt_gotoXY(8, 71);
 				printf("+%x : %x  ",command,operand);
                 break;
             case Down:
@@ -595,9 +604,10 @@ int read_key(enum keys key)
                 mt_gotoXY(5, 65);
                 mt_setbgcolor(9);
                 printf ("+%x ", Instr);
-				mt_gotoXY(8, 71);
+
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
+				mt_gotoXY(8, 71);
 				printf("+%x : %x  ",command,operand);
                 break;
             case Esc:
@@ -639,9 +649,10 @@ int read_key(enum keys key)
                 mt_gotoXY(24, 1);
                 printf("            ");
                 mt_gotoXY(23, 10);
-                mt_gotoXY(8, 71);
+
                 //int command,operand;
                 sc_commandDecode(value, &command, &operand);
+                mt_gotoXY(8, 71);
                 printf("+%x : %x  ",command,operand);
                 break;
             case F6:
@@ -692,9 +703,10 @@ int read_key(enum keys key)
                 printf("            ");
 		        mt_gotoXY(23, 10);
                 printf ("+%x ", Instr);
-				mt_gotoXY(8, 71);
+
 				//int command,operand;
 				sc_commandDecode(value, &command, &operand);
+				mt_gotoXY(8, 71);
 				printf("+%x : %x  ",command,operand);
                 break;
             case Run:

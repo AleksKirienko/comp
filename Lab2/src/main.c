@@ -51,9 +51,10 @@ int main(int args, char* argv[])
     bc_box(7, 64, 3, 20);
     mt_gotoXY(7, 70);
     printf("Operation");
-	mt_gotoXY(8, 71);
+
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
+	mt_gotoXY(8, 71);
 	printf("+%x : %x  ",command,operand);
 
     bc_box(10, 64, 3, 20);
