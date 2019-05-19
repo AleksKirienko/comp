@@ -19,9 +19,11 @@ int main(int args, char* argv[])
     int value;
 
     sc_memoryGet(0, &value);
-
+   	mt_setbgcolor (4);
     mt_gotoXY(2, 2);
-    mt_setbgcolor (4);
+	printf("      ");
+	mt_gotoXY(2, 2);
+
     if (value<32768)  printf("+");
     printf("%x",value);
     mt_setbgcolor (9);
@@ -52,7 +54,7 @@ int main(int args, char* argv[])
 	mt_gotoXY(8, 71);
 	int command,operand;
 	sc_commandDecode(value, &command, &operand);
-	printf("%x:%x",command,operand);
+	printf("+%x : %x  ",command,operand);
 
     bc_box(10, 64, 3, 20);
     mt_gotoXY(10, 70);
@@ -76,6 +78,7 @@ int main(int args, char* argv[])
     printf("q - escape ");
     mt_gotoXY(19, 45);
     printf("F5 - enter chars");
+
     mt_gotoXY(20, 45);
     printf("F6 - enter address");
     mt_gotoXY(21, 45);
