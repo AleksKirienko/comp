@@ -277,7 +277,7 @@ void input()
     fscanf(fin, "%c", &var_tmp);
     if (!check_var(vars, var_tmp))
         add_var(vars, var_tmp);
-    int pos = get_var_pos(vars, var_tmp); // ??????? ??? ?????????? ? ???
+    int pos = get_var_pos(vars, var_tmp);
     add_cmd("READ", pos);
 }
 
