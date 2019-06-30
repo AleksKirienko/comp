@@ -1,6 +1,6 @@
 CXX=gcc
-CFLAGS = -c -Wall -std=c99
-FLAGS  =  -Wall -std=c99
+CFLAGS = -c -Wall 
+FLAGS  =  -Wall 
 OBJECTS = asm.o
 
 .PHONY: clean all sat
