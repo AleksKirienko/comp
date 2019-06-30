@@ -41,7 +41,8 @@ int CU (char A[])
             if (value<32768)  printf("+");
             else printf(" ");
             printf("%x", value);
-            alarm(1);
+            //alarm(1);
+            Timer();
             break;
 
         case 0x11:
@@ -51,6 +52,7 @@ int CU (char A[])
             }
 			mt_gotoXY(30, 1);
             printf("%d", value);
+            sleep(2);
             break;
         case 0x20:
             if (sc_memoryGet(operand, &value) == -1){

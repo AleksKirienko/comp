@@ -364,7 +364,8 @@ void signalhandler(int signo)
 	printf("+%x : %x  ",command,operand);
     itoa(value, A);
 	print (value, A);
-	alarm(1);
+	//alarm(1);
+	Timer();
 }
 
 void Signal(void)
@@ -419,10 +420,10 @@ void Timer (void)
     struct itimerval nval, oval;
     signal (SIGALRM, signalhandler);
 
-    nval.it_interval.tv_sec = 1;
-	nval.it_interval.tv_usec = 0;
-	nval.it_value.tv_sec = 1;
-	nval.it_value.tv_usec = 0;
+    nval.it_interval.tv_sec = 0;
+	nval.it_interval.tv_usec = 200000;
+	nval.it_value.tv_sec = 0;
+	nval.it_value.tv_usec = 200000;
 
     setitimer (ITIMER_REAL, &nval, &oval);
 }
