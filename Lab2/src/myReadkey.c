@@ -673,14 +673,14 @@ int read_key(enum keys key)
                     mt_gotoXY(25, 1);
                     break;
                 }
-
-                mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+                mt_gotoXY(x1/10 + 2, (x1 % 10)*6+2 );
 				printf("      ");
-				mt_gotoXY(address/10 + 2, (address % 10)*6+2 );
+				mt_gotoXY(x1/10 + 2, (x1 % 10)*6+2 );
                 mt_setbgcolor(9);
                 if (value<32768)  printf("+");
 				else printf(" ");
         		printf("%x", value);
+
 				sc_memoryGet(address, &value);
                 mt_setbgcolor(4);
 				x=2+address/10;
